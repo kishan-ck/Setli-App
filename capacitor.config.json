@@ -1,0 +1,27 @@
+{
+  "appId": "com.setli.app",
+  "appName": "Setli",
+  "webDir": "www",
+  "server": {
+    "url": "https://dev.setli.com.au/login",
+    "allowNavigation": [
+      "dev.setli.com.au"
+    ],
+    "cleartext": false
+  },
+  "plugins": {
+    "StatusBar": {
+      "overlaysWebView": false
+    },
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "launchAutoHide": true,
+      "launchFadeOutDuration": 300,
+      "backgroundColor": "#ffffff",
+      "androidSplashResourceName": "splash",
+      "showSpinner": false,
+      "splashFullScreen": true,
+      "splashImmersive": true
+    }
+  }
+}
