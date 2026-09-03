@@ -1,3 +1,10 @@
+//
+//  SceneDelegate.swift
+//  App
+//
+//  Created by MAC BOOK on 01/09/26.
+//
+
 import UIKit
 import Capacitor
 

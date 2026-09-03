@@ -2,6 +2,7 @@
   "appId": "com.setli.app",
   "appName": "Setli",
   "webDir": "www",
+  "appendUserAgent": "SetliApp-WebView",
   "server": {
     "url": "https://dev.setli.com.au/login",
     "allowNavigation": [
@@ -22,6 +23,13 @@
       "showSpinner": false,
       "splashFullScreen": true,
       "splashImmersive": true
+    },
+    "PushNotifications": {
+      "presentationOptions": [
+        "badge",
+        "sound",
+        "alert"
+      ]
     }
   }
 }
