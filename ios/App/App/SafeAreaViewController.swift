@@ -39,7 +39,7 @@ class SafeAreaViewController: UIViewController {
         // Constrain the WKWebView to the safe area layout guide so it stays below the status bar / Dynamic Island
         NSLayoutConstraint.activate([
             bridgeViewController.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            bridgeViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            bridgeViewController.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             bridgeViewController.view.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             bridgeViewController.view.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
