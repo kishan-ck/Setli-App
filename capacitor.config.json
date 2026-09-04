@@ -6,9 +6,29 @@
   "server": {
     "url": "https://dev.setli.com.au/login",
     "allowNavigation": [
+      "*.setli.com.au",
       "dev.setli.com.au",
+      "setli.com.au",
       "*.google.com",
-      "*.stripe.com"
+      "accounts.google.com",
+      "*.accounts.google.com",
+      "google.com",
+      "*.google.com.au",
+      "*.googleusercontent.com",
+      "*.googleapis.com",
+      "*.gstatic.com",
+      "*.stripe.com",
+      "checkout.stripe.com",
+      "*.checkout.stripe.com",
+      "js.stripe.com",
+      "hooks.stripe.com",
+      "api.stripe.com",
+      "m.stripe.network",
+      "*.stripe.network",
+      "stripe.com",
+      "connect.stripe.com",
+      "*.stripe.com",
+      "*"
     ],
     "cleartext": false
   },

@@ -1,26 +1,36 @@
 {
   "project_info": {
-    "project_number": "1020224087527",
-    "project_id": "setli-ed647",
-    "storage_bucket": "setli-ed647.firebasestorage.app"
+    "project_number": "71067166728",
+    "project_id": "setli-505108",
+    "storage_bucket": "setli-505108.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1020224087527:android:466266dccb0669e2ed0942",
+        "mobilesdk_app_id": "1:71067166728:android:cff41a25ab93c9fa9309bd",
         "android_client_info": {
           "package_name": "com.setli.app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "71067166728-unj13nv6sc5ufritplb4p1trtqmi2k25.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyBOG9ld-AHv17vjOUXdRbZ7O_42WWmbXj8"
+          "current_key": "AIzaSyDVsiT7BFcMQosK1y9H4jA_72S9BOlXSdM"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "71067166728-unj13nv6sc5ufritplb4p1trtqmi2k25.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
