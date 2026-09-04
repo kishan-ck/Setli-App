@@ -15,6 +15,7 @@ class AppBridgeViewController: CAPBridgeViewController {
     override func webView(with frame: CGRect, configuration: WKWebViewConfiguration) -> WKWebView {
         let customWebView = AppWebView(frame: frame, configuration: configuration)
         customWebView.container = container
+        customWebView.allowsBackForwardNavigationGestures = true
         return customWebView
     }
 }
