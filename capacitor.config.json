@@ -6,7 +6,9 @@
   "server": {
     "url": "https://dev.setli.com.au/login",
     "allowNavigation": [
-      "dev.setli.com.au"
+      "dev.setli.com.au",
+      "*.google.com",
+      "*.stripe.com"
     ],
     "cleartext": false
   },
