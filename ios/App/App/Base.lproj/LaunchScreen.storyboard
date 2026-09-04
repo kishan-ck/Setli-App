@@ -12,11 +12,23 @@
         <scene sceneID="EHf-IW-A2E">
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
-                    <imageView key="view" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Splash" id="snD-IY-ifK">
+                    <view key="view" contentMode="scaleToFill" id="R8M-05-b48">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Splash" translatesAutoresizingMaskIntoConstraints="NO" id="2w8-Bg-0EM">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="PYm-sc-sHs"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </imageView>
+                        <constraints>
+                            <constraint firstItem="2w8-Bg-0EM" firstAttribute="top" secondItem="R8M-05-b48" secondAttribute="top" id="881-pE-6kU"/>
+                            <constraint firstItem="2w8-Bg-0EM" firstAttribute="trailing" secondItem="R8M-05-b48" secondAttribute="trailing" id="CIE-Yf-y3y"/>
+                            <constraint firstItem="2w8-Bg-0EM" firstAttribute="bottom" secondItem="R8M-05-b48" secondAttribute="bottom" id="L3u-JM-5Ok"/>
+                            <constraint firstItem="2w8-Bg-0EM" firstAttribute="leading" secondItem="R8M-05-b48" secondAttribute="leading" id="f3u-hO-Vvf"/>
+                        </constraints>
+                    </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

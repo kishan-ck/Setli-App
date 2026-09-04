@@ -9,9 +9,37 @@ import UIKit
 import Capacitor
 import WebKit
 
+class AppBridgeViewController: CAPBridgeViewController {
+    weak var container: SafeAreaViewController?
+
+    override func webView(with frame: CGRect, configuration: WKWebViewConfiguration) -> WKWebView {
+        let customWebView = AppWebView(frame: frame, configuration: configuration)
+        customWebView.container = container
+        return customWebView
+    }
+}
+
+class AppWebView: WKWebView {
+    weak var container: SafeAreaViewController?
+
+    override func didAddSubview(_ subview: UIView) {
+        super.didAddSubview(subview)
+        // If an overlay view (e.g. Capacitor's SplashScreen) is added to the webview,
+        // reparent it to the root container view controller so it covers the entire screen
+        // and its icon is centered exactly without being offset by safe area insets.
+        if subview !== self.scrollView && !(subview is UIScrollView) && !(subview is UIActivityIndicatorView),
+           let container = container {
+            container.view.addSubview(subview)
+            subview.translatesAutoresizingMaskIntoConstraints = true
+            subview.frame = container.view.bounds
+            container.view.bringSubviewToFront(subview)
+        }
+    }
+}
+
 class SafeAreaViewController: UIViewController {
 
-    public let bridgeViewController = CAPBridgeViewController()
+    public let bridgeViewController: CAPBridgeViewController
 
     public var webView: WKWebView? {
         return bridgeViewController.webView
@@ -19,6 +47,20 @@ class SafeAreaViewController: UIViewController {
 
     public var bridge: CAPBridgeProtocol? {
         return bridgeViewController.bridge
+    }
+
+    init() {
+        let bridgeVC = AppBridgeViewController()
+        self.bridgeViewController = bridgeVC
+        super.init(nibName: nil, bundle: nil)
+        bridgeVC.container = self
+    }
+
+    required init?(coder: NSCoder) {
+        let bridgeVC = AppBridgeViewController()
+        self.bridgeViewController = bridgeVC
+        super.init(coder: coder)
+        bridgeVC.container = self
     }
 
     override func viewDidLoad() {
@@ -45,6 +87,14 @@ class SafeAreaViewController: UIViewController {
         ])
 
         bridgeViewController.didMove(toParent: self)
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        // Ensure any overlay splash view matches the full container bounds on rotation/layout
+        for subview in view.subviews where subview !== bridgeViewController.view {
+            subview.frame = view.bounds
+        }
     }
 
     // Forward status bar style and visibility
