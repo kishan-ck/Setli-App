@@ -3,9 +3,9 @@
     android:id="@+id/onboardingRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:fitsSystemWindows="true"
+    android:background="@drawable/bg_gradient"
     android:clickable="true"
+    android:fitsSystemWindows="true"
     android:focusable="true">
 
     <!-- Top Header Bar -->
@@ -27,20 +27,11 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="84dp"
+                android:layout_height="26dp"
                 android:contentDescription="@string/app_name"
                 android:scaleType="fitCenter"
-                android:src="@drawable/app_logo" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="Setli"
-                android:textColor="#121A28"
-                android:textSize="22sp"
-                android:textStyle="bold" />
+                android:src="@drawable/icon_setli" />
         </LinearLayout>
 
         <!-- Skip Button -->
@@ -53,9 +44,9 @@
             android:paddingStart="12dp"
             android:paddingEnd="4dp"
             android:text="Skip"
-            android:textColor="#6B7280"
+            android:textColor="#6B8CAE"
             android:textSize="15sp"
-            android:textStyle="bold" />
+            android:fontFamily="@font/plus_jakarta_sans_semi_bold"/>
     </RelativeLayout>
 
     <!-- Bottom Controls Container -->
@@ -80,8 +71,8 @@
             android:text="Next  ›"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
-            android:textSize="17sp"
-            android:textStyle="bold" />
+            android:textSize="16sp"
+            android:fontFamily="@font/plus_jakarta_sans_bold" />
 
         <!-- Secondary Row (Back button on left, custom pill dots in center) -->
         <RelativeLayout
@@ -128,6 +119,20 @@
 
                 <View
                     android:id="@+id/dot2"
+                    android:layout_width="6dp"
+                    android:layout_height="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/bg_indicator_inactive" />
+
+                <View
+                    android:id="@+id/dot3"
+                    android:layout_width="6dp"
+                    android:layout_height="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/bg_indicator_inactive" />
+
+                <View
+                    android:id="@+id/dot4"
                     android:layout_width="6dp"
                     android:layout_height="6dp"
                     android:background="@drawable/bg_indicator_inactive" />
