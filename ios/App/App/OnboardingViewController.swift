@@ -8,18 +8,67 @@
 import UIKit
 
 struct OnboardingSlide {
-    let imageName: String
-    let title: String
+    let illustrationName: String
+    let categoryText: String
+    let categoryDotColor: UIColor
+    let categoryBgColor: UIColor
+    let categoryTextColor: UIColor
+    let titlePrefix: String
+    let titleHighlight: String
     let subtitle: String
+
+    init(
+        illustrationName: String,
+        categoryText: String,
+        categoryDotHex: String,
+        categoryBgHex: String,
+        categoryTextHex: String,
+        titlePrefix: String,
+        titleHighlight: String,
+        subtitle: String
+    ) {
+        self.illustrationName = illustrationName
+        self.categoryText = categoryText
+        self.categoryDotColor = UIColor(hex: categoryDotHex)
+        self.categoryBgColor = UIColor(hex: categoryBgHex)
+        self.categoryTextColor = UIColor(hex: categoryTextHex)
+        self.titlePrefix = titlePrefix
+        self.titleHighlight = titleHighlight
+        self.subtitle = subtitle
+    }
+
+    init(
+        illustrationName: String,
+        categoryText: String,
+        categoryDotColor: UIColor,
+        categoryBgColor: UIColor,
+        categoryTextColor: UIColor,
+        titlePrefix: String,
+        titleHighlight: String,
+        subtitle: String
+    ) {
+        self.illustrationName = illustrationName
+        self.categoryText = categoryText
+        self.categoryDotColor = categoryDotColor
+        self.categoryBgColor = categoryBgColor
+        self.categoryTextColor = categoryTextColor
+        self.titlePrefix = titlePrefix
+        self.titleHighlight = titleHighlight
+        self.subtitle = subtitle
+    }
 }
 
 class OnboardingCell: UICollectionViewCell {
     static let reuseIdentifier = "OnboardingCell"
 
-    private let logoImageView = UIImageView()
+    private let illustrationImageView = UIImageView()
+    private let textStack = UIStackView()
+    private let categoryPillContainer = UIView()
+    private let categoryPillStack = UIStackView()
+    private let categoryDotView = UIView()
+    private let categoryLabel = UILabel()
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
-    private let contentStack = UIStackView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,69 +83,131 @@ class OnboardingCell: UICollectionViewCell {
     private func setupViews() {
         backgroundColor = .clear
 
-        // Logo Image View
-        logoImageView.translatesAutoresizingMaskIntoConstraints = false
-        logoImageView.contentMode = .scaleAspectFit
-        logoImageView.clipsToBounds = true
+        // Illustration Image View
+        illustrationImageView.translatesAutoresizingMaskIntoConstraints = false
+        illustrationImageView.contentMode = .scaleAspectFit
+        illustrationImageView.clipsToBounds = true
+        illustrationImageView.layer.cornerRadius = 16
+        contentView.addSubview(illustrationImageView)
+
+        // Category Pill
+        categoryDotView.translatesAutoresizingMaskIntoConstraints = false
+        categoryDotView.layer.cornerRadius = 3.5
+        categoryDotView.clipsToBounds = true
+
+        categoryLabel.translatesAutoresizingMaskIntoConstraints = false
+        categoryLabel.font = AppFont.bold(size: 10)
+
+        categoryPillStack.translatesAutoresizingMaskIntoConstraints = false
+        categoryPillStack.axis = .horizontal
+        categoryPillStack.alignment = .center
+        categoryPillStack.spacing = 6
+        categoryPillStack.addArrangedSubview(categoryDotView)
+        categoryPillStack.addArrangedSubview(categoryLabel)
+
+        categoryPillContainer.translatesAutoresizingMaskIntoConstraints = false
+        categoryPillContainer.layer.cornerRadius = 18
+        categoryPillContainer.clipsToBounds = true
+        categoryPillContainer.addSubview(categoryPillStack)
 
         // Title Label
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.font = UIFont.systemFont(ofSize: 26, weight: .bold)
-        titleLabel.textColor = UIColor(red: 0.07, green: 0.10, blue: 0.16, alpha: 1.0) // #121A28
-        titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
+        titleLabel.textAlignment = .left
 
         // Subtitle Label
         subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        subtitleLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        subtitleLabel.textColor = UIColor(red: 0.42, green: 0.46, blue: 0.52, alpha: 1.0) // #6B7585
-        subtitleLabel.textAlignment = .center
         subtitleLabel.numberOfLines = 0
+        subtitleLabel.textAlignment = .left
 
-        // Content Stack
-        contentStack.translatesAutoresizingMaskIntoConstraints = false
-        contentStack.axis = .vertical
-        contentStack.alignment = .center
-        contentStack.distribution = .fill
-        contentStack.spacing = 16
+        // Text Stack (Left aligned, pinned to bottom)
+        textStack.translatesAutoresizingMaskIntoConstraints = false
+        textStack.axis = .vertical
+        textStack.alignment = .leading
+        textStack.distribution = .fill
+        textStack.spacing = 0
 
-        contentStack.addArrangedSubview(logoImageView)
-        contentStack.setCustomSpacing(32, after: logoImageView)
-        contentStack.addArrangedSubview(titleLabel)
-        contentStack.setCustomSpacing(12, after: titleLabel)
-        contentStack.addArrangedSubview(subtitleLabel)
+        textStack.addArrangedSubview(categoryPillContainer)
+        textStack.setCustomSpacing(16, after: categoryPillContainer)
+        textStack.addArrangedSubview(titleLabel)
+        textStack.setCustomSpacing(12, after: titleLabel)
+        textStack.addArrangedSubview(subtitleLabel)
 
-        contentView.addSubview(contentStack)
+        contentView.addSubview(textStack)
 
         NSLayoutConstraint.activate([
-            logoImageView.widthAnchor.constraint(equalToConstant: 130),
-            logoImageView.heightAnchor.constraint(equalToConstant: 130),
+            // Category pill inner constraints
+            categoryDotView.widthAnchor.constraint(equalToConstant: 7),
+            categoryDotView.heightAnchor.constraint(equalToConstant: 7),
 
-            contentStack.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            contentStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -30),
-            contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
-            contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32)
+            categoryPillStack.topAnchor.constraint(equalTo: categoryPillContainer.topAnchor, constant: 5),
+            categoryPillStack.bottomAnchor.constraint(equalTo: categoryPillContainer.bottomAnchor, constant: -5),
+            categoryPillStack.leadingAnchor.constraint(equalTo: categoryPillContainer.leadingAnchor, constant: 10),
+            categoryPillStack.trailingAnchor.constraint(equalTo: categoryPillContainer.trailingAnchor, constant: -10),
+            categoryPillStack.heightAnchor.constraint(equalToConstant: 25),
+
+            // Text content stack pinned to bottom
+            textStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            textStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+
+            // Illustration image view centered in upper remaining space
+            illustrationImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            illustrationImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            illustrationImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            illustrationImageView.bottomAnchor.constraint(equalTo: textStack.topAnchor, constant: -20),
+            illustrationImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
         ])
     }
 
     func configure(with slide: OnboardingSlide) {
-        if let image = UIImage(named: slide.imageName) {
-            logoImageView.image = image
+        // Load custom illustration with fallback
+        if let image = UIImage(named: slide.illustrationName) {
+            illustrationImageView.image = image
         } else {
-            // Fallback to blue S icon if image set is loading
-            logoImageView.image = UIImage(named: "Splash")
+            illustrationImageView.image = UIImage(named: "AppLogo")
         }
-        titleLabel.text = slide.title
-        
+
+        // Category Pill Styling
+        categoryDotView.backgroundColor = slide.categoryDotColor
+        categoryPillContainer.backgroundColor = slide.categoryBgColor
+        categoryLabel.text = slide.categoryText
+        categoryLabel.textColor = slide.categoryTextColor
+
+        // Dual-color Title (Black + Brand Blue)
+        let titleAttr = NSMutableAttributedString()
+        let boldFont = AppFont.extraBold(size: 28)
+
+        let prefixPart = NSAttributedString(
+            string: slide.titlePrefix,
+            attributes: [
+                .font: boldFont,
+                .foregroundColor: AppColor.textPrimaryDark.color
+            ]
+        )
+
+        let highlightPart = NSAttributedString(
+            string: slide.titleHighlight,
+            attributes: [
+                .font: boldFont,
+                .foregroundColor: AppColor.primaryBlue.color
+            ]
+        )
+
+        titleAttr.append(prefixPart)
+        titleAttr.append(highlightPart)
+        titleLabel.attributedText = titleAttr
+
+        // Subtitle with line spacing
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 5
-        paragraphStyle.alignment = .center
-        
+        paragraphStyle.lineSpacing = 4
+        paragraphStyle.alignment = .left
+
         let attributedSubtitle = NSAttributedString(
             string: slide.subtitle,
             attributes: [
-                .font: UIFont.systemFont(ofSize: 16, weight: .regular),
-                .foregroundColor: UIColor(red: 0.42, green: 0.46, blue: 0.52, alpha: 1.0),
+                .font: AppFont.regular(size: 15),
+                .foregroundColor: AppColor.textSecondaryGray.color,
                 .paragraphStyle: paragraphStyle
             ]
         )
@@ -116,31 +227,80 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
 
     private let slides: [OnboardingSlide] = [
         OnboardingSlide(
-            imageName: "AppLogo",
-            title: "Welcome to Setli",
-            subtitle: "Streamline your property maintenance, settlements, and updates all in one place."
+            illustrationName: "Onboarding1",
+            categoryText: "ALL-IN-ONE RENT MANAGEMENT",
+            categoryDotHex: AppColor.badgeBlueText.hex,
+            categoryBgHex: AppColor.badgeBlueBg.hex,
+            categoryTextHex: AppColor.badgeBlueText.hex,
+            titlePrefix: "Manage Your Rent, ",
+            titleHighlight: "All in One Place",
+            subtitle: "Collect rent, manage tenants, track payments, and keep your rental activity organized from one simple platform."
         ),
         OnboardingSlide(
-            imageName: "AppLogo",
-            title: "Track & Manage Requests",
-            subtitle: "Effortlessly submit maintenance issues, upload documentation, and receive real-time updates."
+            illustrationName: "Onboarding2",
+            categoryText: "SMART PAYMENT TRACKING",
+            categoryDotHex: AppColor.badgeBlueText.hex,
+            categoryBgHex: AppColor.badgeBlueBg.hex,
+            categoryTextHex: AppColor.badgeBlueText.hex,
+            titlePrefix: "Track Every Payment ",
+            titleHighlight: "With Ease",
+            subtitle: "Stay on top of rent collections, payment status, and tenant activity with simple tracking and helpful reminders."
         ),
         OnboardingSlide(
-            imageName: "AppLogo",
-            title: "Seamless Settlement Experience",
-            subtitle: "Connect directly with property managers and enjoy a stress-free transition."
+            illustrationName: "Onboarding3",
+            categoryText: "REWARDS & SMARTER MANAGEMENT",
+            categoryDotHex: AppColor.badgeAmberDot.hex,
+            categoryBgHex: AppColor.badgeAmberBg.hex,
+            categoryTextHex: AppColor.badgeAmberText.hex,
+            titlePrefix: "Manage Smarter. ",
+            titleHighlight: "Earn More.",
+            subtitle: "Unlock rewards, discover useful insights, and make your rent management experience simpler and more rewarding."
+        ),
+        OnboardingSlide(
+            illustrationName: "Onboarding4",
+            categoryText: "FOR HOSTS & LANDLORDS",
+            categoryDotHex: AppColor.badgeBlueText.hex,
+            categoryBgHex: AppColor.badgeBlueBg.hex,
+            categoryTextHex: AppColor.badgeBlueText.hex,
+            titlePrefix: "Manage Your Properties ",
+            titleHighlight: "With Ease",
+            subtitle: "List properties, manage tenants, track rent and stay on top of your property activity from one simple platform."
+        ),
+        OnboardingSlide(
+            illustrationName: "Onboarding5",
+            categoryText: "FOR TENANTS",
+            categoryDotHex: AppColor.badgeBlueText.hex,
+            categoryBgHex: AppColor.badgeBlueBg.hex,
+            categoryTextHex: AppColor.badgeBlueText.hex,
+            titlePrefix: "Your Rental Life, ",
+            titleHighlight: "Made Simple",
+            subtitle: "Find your rental information, manage payments, stay connected with your host and keep everything organized in one place."
         )
     ]
 
     private var currentIndex: Int = 0
     private var isProgrammaticScroll: Bool = false
 
+    // Header Views
+    private let headerView = UIView()
+    private let logoImageView = UIImageView()
+    private let brandNameLabel = UILabel()
+    private let skipButton = UIButton(type: .system)
+
+    // Collection View
     private var collectionView: UICollectionView!
-    private let pageControl = UIPageControl()
+
+    // Bottom Controls
     private let bottomControlsContainer = UIView()
-    private let leftArrowButton = UIButton(type: .system)
-    private let rightArrowButton = UIButton(type: .system)
-    private let getStartedButton = UIButton(type: .system)
+    private let primaryActionButton = UIButton(type: .system)
+    private let secondaryRowView = UIView()
+    private let backButton = UIButton(type: .system)
+    private let dotsContainer = UIStackView()
+    private var dotViews: [UIView] = []
+    private var dotWidthConstraints: [NSLayoutConstraint] = []
+
+    // Background Gradient Layer (matching Android bg_gradient.xml)
+    private let backgroundGradientLayer = CAGradientLayer()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -157,9 +317,91 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
     }
 
     private func setupUI() {
-        view.backgroundColor = .white
+        setupBackgroundGradient()
+        setupHeader()
+        setupCollectionView()
+        setupBottomControls()
 
-        // Layout CollectionView
+        NSLayoutConstraint.activate([
+            // Header
+            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
+            headerView.heightAnchor.constraint(equalToConstant: 44),
+
+            // Collection View fills between header and bottom controls
+            collectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 8),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: bottomControlsContainer.topAnchor, constant: -12),
+
+            // Bottom Controls
+            bottomControlsContainer.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 24),
+            bottomControlsContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -24),
+            bottomControlsContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -12)
+        ])
+    }
+
+    private func setupBackgroundGradient() {
+        // CSS: linear-gradient(175deg, #EBF3FF 3.67%, #F4F9FF 45.37%, #FFFFFF 96.33%)
+        backgroundGradientLayer.colors = [
+            UIColor(hex: "#EBF3FF").cgColor,
+            UIColor(hex: "#F4F9FF").cgColor,
+            UIColor(hex: "#FFFFFF").cgColor
+        ]
+        backgroundGradientLayer.locations = [0.0367, 0.4537, 0.9633]
+        
+        // CSS 175deg angle calculation:
+        // dx = sin(175°) ≈ 0.0872, dy = -cos(175°) ≈ 0.9962
+        // start = (0.5 - 0.5*dx, 0.5 - 0.5*dy), end = (0.5 + 0.5*dx, 0.5 + 0.5*dy)
+        backgroundGradientLayer.startPoint = CGPoint(x: 0.456, y: 0.002)
+        backgroundGradientLayer.endPoint = CGPoint(x: 0.544, y: 0.998)
+        view.layer.insertSublayer(backgroundGradientLayer, at: 0)
+    }
+
+    private func setupHeader() {
+        headerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(headerView)
+
+        // Logo
+        logoImageView.translatesAutoresizingMaskIntoConstraints = false
+        logoImageView.contentMode = .scaleAspectFit
+        logoImageView.clipsToBounds = true
+        logoImageView.image = UIImage(named: "SetliIcon")
+        headerView.addSubview(logoImageView)
+
+        /*// Brand Name "Setli"
+        brandNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        brandNameLabel.text = "Setli"
+        brandNameLabel.font = AppFont.bold(size: 22)
+        brandNameLabel.textColor = AppColor.textPrimaryDark.color
+        headerView.addSubview(brandNameLabel)*/
+
+        // Skip Button
+        skipButton.translatesAutoresizingMaskIntoConstraints = false
+        skipButton.setTitle("Skip", for: .normal)
+        skipButton.setTitleColor(AppColor.textMutedGray.color, for: .normal)
+        skipButton.titleLabel?.font = AppFont.semiBold(size: 14)
+        skipButton.addTarget(self, action: #selector(skipTapped), for: .touchUpInside)
+        headerView.addSubview(skipButton)
+
+        NSLayoutConstraint.activate([
+            logoImageView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
+            logoImageView.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
+            logoImageView.widthAnchor.constraint(equalToConstant: 84),
+            logoImageView.heightAnchor.constraint(equalToConstant: 26),
+
+            /*brandNameLabel.leadingAnchor.constraint(equalTo: logoImageView.trailingAnchor, constant: 8),
+            brandNameLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),*/
+
+            skipButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor),
+            skipButton.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
+            skipButton.heightAnchor.constraint(equalToConstant: 44),
+            skipButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 44)
+        ])
+    }
+
+    private func setupCollectionView() {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumLineSpacing = 0
@@ -169,167 +411,155 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.isPagingEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .clear
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(OnboardingCell.self, forCellWithReuseIdentifier: OnboardingCell.reuseIdentifier)
 
         view.addSubview(collectionView)
+    }
 
-        // Page Control
-        pageControl.translatesAutoresizingMaskIntoConstraints = false
-        pageControl.numberOfPages = slides.count
-        pageControl.currentPage = 0
-        pageControl.isUserInteractionEnabled = false
-        pageControl.currentPageIndicatorTintColor = UIColor(red: 0.0, green: 0.45, blue: 1.0, alpha: 1.0) // #0073FF
-        pageControl.pageIndicatorTintColor = UIColor(red: 0.86, green: 0.89, blue: 0.93, alpha: 1.0)
-        view.addSubview(pageControl)
-
-        // Bottom Controls Container
+    private func setupBottomControls() {
         bottomControlsContainer.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(bottomControlsContainer)
 
-        setupButtons()
+        // Primary Action Button ("Next >" or "Get Started >")
+        primaryActionButton.translatesAutoresizingMaskIntoConstraints = false
+        primaryActionButton.backgroundColor = AppColor.primaryBlue.color
+        primaryActionButton.layer.cornerRadius = 16
+        primaryActionButton.setTitleColor(.white, for: .normal)
+        primaryActionButton.titleLabel?.font = AppFont.bold(size: 16)
+
+        // Soft elevation shadow
+        primaryActionButton.layer.shadowColor = AppColor.primaryBlue.withAlpha(0.35).cgColor
+        primaryActionButton.layer.shadowOffset = CGSize(width: 0, height: 6)
+        primaryActionButton.layer.shadowRadius = 12
+        primaryActionButton.layer.shadowOpacity = 1
+        primaryActionButton.layer.masksToBounds = false
+
+        primaryActionButton.addTarget(self, action: #selector(primaryActionTapped), for: .touchUpInside)
+        bottomControlsContainer.addSubview(primaryActionButton)
+
+        // Secondary Row (Back button on left, custom pill dots in center)
+        secondaryRowView.translatesAutoresizingMaskIntoConstraints = false
+        bottomControlsContainer.addSubview(secondaryRowView)
+
+        // Back Button
+        backButton.translatesAutoresizingMaskIntoConstraints = false
+        let chevronLeft = UIImage(systemName: "chevron.left", withConfiguration: UIImage.SymbolConfiguration(pointSize: 12, weight: .bold))
+        backButton.setImage(chevronLeft, for: .normal)
+        backButton.setTitle(" Back", for: .normal)
+        backButton.tintColor = AppColor.textMutedGray.color
+        backButton.setTitleColor(AppColor.textMutedGray.color, for: .normal)
+        backButton.titleLabel?.font = AppFont.semiBold(size: 14)
+        backButton.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
+        secondaryRowView.addSubview(backButton)
+
+        // Dots Container
+        dotsContainer.translatesAutoresizingMaskIntoConstraints = false
+        dotsContainer.axis = .horizontal
+        dotsContainer.alignment = .center
+        dotsContainer.spacing = 6
+        secondaryRowView.addSubview(dotsContainer)
+
+        // Build Indicator Dots
+        for i in 0..<slides.count {
+            let dot = UIView()
+            dot.translatesAutoresizingMaskIntoConstraints = false
+            dot.layer.cornerRadius = 3
+            dot.clipsToBounds = true
+            dot.backgroundColor = (i == 0) ? AppColor.indicatorActive.color : AppColor.indicatorInactive.color
+
+            let widthConstraint = dot.widthAnchor.constraint(equalToConstant: (i == 0) ? 22 : 6)
+            widthConstraint.isActive = true
+            dot.heightAnchor.constraint(equalToConstant: 6).isActive = true
+
+            dotViews.append(dot)
+            dotWidthConstraints.append(widthConstraint)
+            dotsContainer.addArrangedSubview(dot)
+        }
 
         NSLayoutConstraint.activate([
-            // Collection view fills top down to page control
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: pageControl.topAnchor, constant: -16),
+            // Primary Action Button
+            primaryActionButton.topAnchor.constraint(equalTo: bottomControlsContainer.topAnchor),
+            primaryActionButton.leadingAnchor.constraint(equalTo: bottomControlsContainer.leadingAnchor),
+            primaryActionButton.trailingAnchor.constraint(equalTo: bottomControlsContainer.trailingAnchor),
+            primaryActionButton.heightAnchor.constraint(equalToConstant: 54),
 
-            // Page control centered above bottom buttons
-            pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            pageControl.bottomAnchor.constraint(equalTo: bottomControlsContainer.topAnchor, constant: -20),
-            pageControl.heightAnchor.constraint(equalToConstant: 20),
+            // Secondary Row
+            secondaryRowView.topAnchor.constraint(equalTo: primaryActionButton.bottomAnchor, constant: 14),
+            secondaryRowView.leadingAnchor.constraint(equalTo: bottomControlsContainer.leadingAnchor),
+            secondaryRowView.trailingAnchor.constraint(equalTo: bottomControlsContainer.trailingAnchor),
+            secondaryRowView.bottomAnchor.constraint(equalTo: bottomControlsContainer.bottomAnchor),
+            secondaryRowView.heightAnchor.constraint(equalToConstant: 32),
 
-            // Bottom controls container
-            bottomControlsContainer.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 24),
-            bottomControlsContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -24),
-            bottomControlsContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -24),
-            bottomControlsContainer.heightAnchor.constraint(equalToConstant: 54)
+            // Back Button anchored to leading
+            backButton.leadingAnchor.constraint(equalTo: secondaryRowView.leadingAnchor),
+            backButton.centerYAnchor.constraint(equalTo: secondaryRowView.centerYAnchor),
+            backButton.heightAnchor.constraint(equalToConstant: 32),
+
+            // Dots Container centered horizontally
+            dotsContainer.centerXAnchor.constraint(equalTo: secondaryRowView.centerXAnchor),
+            dotsContainer.centerYAnchor.constraint(equalTo: secondaryRowView.centerYAnchor)
         ])
     }
 
-    private func setupButtons() {
-        let arrowSymbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .bold)
-
-        // Left Arrow Button (circular, gray background)
-        leftArrowButton.translatesAutoresizingMaskIntoConstraints = false
-        let leftImage = UIImage(systemName: "arrow.left", withConfiguration: arrowSymbolConfig) ?? createArrowImage(isLeft: true)
-        leftArrowButton.setImage(leftImage, for: .normal)
-        leftArrowButton.tintColor = UIColor(red: 0.20, green: 0.24, blue: 0.30, alpha: 1.0)
-        leftArrowButton.backgroundColor = UIColor(red: 0.94, green: 0.95, blue: 0.97, alpha: 1.0)
-        leftArrowButton.layer.cornerRadius = 27
-        leftArrowButton.layer.masksToBounds = true
-        leftArrowButton.addTarget(self, action: #selector(leftArrowTapped), for: .touchUpInside)
-        bottomControlsContainer.addSubview(leftArrowButton)
-
-        // Right Arrow Button (circular, Setli blue background)
-        rightArrowButton.translatesAutoresizingMaskIntoConstraints = false
-        let rightImage = UIImage(systemName: "arrow.right", withConfiguration: arrowSymbolConfig) ?? createArrowImage(isLeft: false)
-        rightArrowButton.setImage(rightImage, for: .normal)
-        rightArrowButton.tintColor = .white
-        rightArrowButton.backgroundColor = UIColor(red: 0.0, green: 0.45, blue: 1.0, alpha: 1.0) // Setli Blue #0073FF
-        rightArrowButton.layer.cornerRadius = 27
-        rightArrowButton.layer.masksToBounds = true
-        rightArrowButton.addTarget(self, action: #selector(rightArrowTapped), for: .touchUpInside)
-        bottomControlsContainer.addSubview(rightArrowButton)
-
-        // "Get Started" Button (pill shape, Setli blue background)
-        getStartedButton.translatesAutoresizingMaskIntoConstraints = false
-        getStartedButton.setTitle("Get Started", for: .normal)
-        getStartedButton.setTitleColor(.white, for: .normal)
-        getStartedButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
-        getStartedButton.backgroundColor = UIColor(red: 0.0, green: 0.45, blue: 1.0, alpha: 1.0)
-        getStartedButton.layer.cornerRadius = 27
-        getStartedButton.layer.masksToBounds = true
-        getStartedButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
-        getStartedButton.addTarget(self, action: #selector(getStartedTapped), for: .touchUpInside)
-        bottomControlsContainer.addSubview(getStartedButton)
-
-        NSLayoutConstraint.activate([
-            // Left Arrow Button anchored to bottom-left
-            leftArrowButton.leadingAnchor.constraint(equalTo: bottomControlsContainer.leadingAnchor),
-            leftArrowButton.centerYAnchor.constraint(equalTo: bottomControlsContainer.centerYAnchor),
-            leftArrowButton.widthAnchor.constraint(equalToConstant: 54),
-            leftArrowButton.heightAnchor.constraint(equalToConstant: 54),
-
-            // Right Arrow Button anchored to bottom-right
-            rightArrowButton.trailingAnchor.constraint(equalTo: bottomControlsContainer.trailingAnchor),
-            rightArrowButton.centerYAnchor.constraint(equalTo: bottomControlsContainer.centerYAnchor),
-            rightArrowButton.widthAnchor.constraint(equalToConstant: 54),
-            rightArrowButton.heightAnchor.constraint(equalToConstant: 54),
-
-            // Get Started Button anchored to bottom-right
-            getStartedButton.trailingAnchor.constraint(equalTo: bottomControlsContainer.trailingAnchor),
-            getStartedButton.centerYAnchor.constraint(equalTo: bottomControlsContainer.centerYAnchor),
-            getStartedButton.heightAnchor.constraint(equalToConstant: 54),
-            getStartedButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 140)
-        ])
-    }
-
-    // Dynamic visibility conforming strictly to specifications:
-    // Index 0: only bottom-right arrow.
-    // Index 1: bottom-left arrow and right-side arrow.
-    // Index 2: bottom-left arrow and 'Get Started' button on right side.
     private func updateControls(for index: Int, animated: Bool) {
         currentIndex = index
-        pageControl.currentPage = index
 
-        let showLeft = (index > 0)
-        let showRightArrow = (index < slides.count - 1)
-        let showGetStarted = (index == slides.count - 1)
+        let isLastPage = (index == slides.count - 1)
+        let showBack = (index > 0)
 
-        // Make targets visible before animating alpha
-        if showLeft { leftArrowButton.isHidden = false }
-        if showRightArrow { rightArrowButton.isHidden = false }
-        if showGetStarted { getStartedButton.isHidden = false }
+        // Button title with right arrow symbol
+        let buttonTitle = isLastPage ? "Get Started  ›" : "Next  ›"
+        primaryActionButton.setTitle(buttonTitle, for: .normal)
 
-        let animations = {
-            self.leftArrowButton.alpha = showLeft ? 1.0 : 0.0
-            self.leftArrowButton.isUserInteractionEnabled = showLeft
+        // Update Skip button visibility (hide on last screen)
+        UIView.animate(withDuration: animated ? 0.2 : 0) {
+            self.skipButton.alpha = isLastPage ? 0.0 : 1.0
+            self.skipButton.isUserInteractionEnabled = !isLastPage
 
-            self.rightArrowButton.alpha = showRightArrow ? 1.0 : 0.0
-            self.rightArrowButton.isUserInteractionEnabled = showRightArrow
-
-            self.getStartedButton.alpha = showGetStarted ? 1.0 : 0.0
-            self.getStartedButton.isUserInteractionEnabled = showGetStarted
+            self.backButton.alpha = showBack ? 1.0 : 0.0
+            self.backButton.isUserInteractionEnabled = showBack
         }
 
-        let completion: (Bool) -> Void = { _ in
-            if !showLeft { self.leftArrowButton.isHidden = true }
-            if !showRightArrow { self.rightArrowButton.isHidden = true }
-            if !showGetStarted { self.getStartedButton.isHidden = true }
-        }
+        // Update Animated Pill Dots
+        for (i, dot) in dotViews.enumerated() {
+            let isActive = (i == index)
+            dotWidthConstraints[i].constant = isActive ? 22 : 6
 
-        if animated {
-            UIView.animate(
-                withDuration: 0.25,
-                delay: 0,
-                options: [.curveEaseInOut, .beginFromCurrentState],
-                animations: animations,
-                completion: completion
-            )
-        } else {
-            animations()
-            completion(true)
+            if animated {
+                UIView.animate(withDuration: 0.25, delay: 0, options: [.curveEaseInOut], animations: {
+                    dot.backgroundColor = isActive ? AppColor.indicatorActive.color : AppColor.indicatorInactive.color
+                    self.dotsContainer.layoutIfNeeded()
+                })
+            } else {
+                dot.backgroundColor = isActive ? AppColor.indicatorActive.color : AppColor.indicatorInactive.color
+                self.dotsContainer.layoutIfNeeded()
+            }
         }
     }
 
-    @objc private func leftArrowTapped() {
+    @objc private func primaryActionTapped() {
+        if currentIndex < slides.count - 1 {
+            let nextIndex = currentIndex + 1
+            scrollToPage(at: nextIndex)
+        } else {
+            completeOnboarding()
+        }
+    }
+
+    @objc private func backTapped() {
         guard currentIndex > 0 else { return }
         let prevIndex = currentIndex - 1
         scrollToPage(at: prevIndex)
     }
 
-    @objc private func rightArrowTapped() {
-        guard currentIndex < slides.count - 1 else { return }
-        let nextIndex = currentIndex + 1
-        scrollToPage(at: nextIndex)
+    @objc private func skipTapped() {
+        completeOnboarding()
     }
 
-    @objc private func getStartedTapped() {
+    private func completeOnboarding() {
         let generator = UIImpactFeedbackGenerator(style: .medium)
         generator.impactOccurred()
 
@@ -368,6 +598,7 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        backgroundGradientLayer.frame = view.bounds
         collectionView.collectionViewLayout.invalidateLayout()
     }
 
@@ -400,28 +631,5 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
 
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         isProgrammaticScroll = false
-    }
-
-    // Fallback arrow image generator if SF Symbols are unavailable
-    private func createArrowImage(isLeft: Bool) -> UIImage {
-        let size = CGSize(width: 24, height: 24)
-        let renderer = UIGraphicsImageRenderer(size: size)
-        return renderer.image { ctx in
-            let path = UIBezierPath()
-            if isLeft {
-                path.move(to: CGPoint(x: 15, y: 5))
-                path.addLine(to: CGPoint(x: 8, y: 12))
-                path.addLine(to: CGPoint(x: 15, y: 19))
-            } else {
-                path.move(to: CGPoint(x: 9, y: 5))
-                path.addLine(to: CGPoint(x: 16, y: 12))
-                path.addLine(to: CGPoint(x: 9, y: 19))
-            }
-            path.lineWidth = 2.5
-            path.lineCapStyle = .round
-            path.lineJoinStyle = .round
-            UIColor.white.setStroke()
-            path.stroke()
-        }.withRenderingMode(.alwaysTemplate)
     }
 }
