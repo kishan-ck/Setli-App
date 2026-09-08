@@ -40,6 +40,7 @@ class AppWebView: WKWebView {
 class SafeAreaViewController: UIViewController {
 
     public let bridgeViewController: CAPBridgeViewController
+    private var onboardingViewController: OnboardingViewController?
 
     public var webView: WKWebView? {
         return bridgeViewController.webView
@@ -87,19 +88,55 @@ class SafeAreaViewController: UIViewController {
         ])
 
         bridgeViewController.didMove(toParent: self)
+
+        // Setup onboarding if not yet completed
+        setupOnboardingIfNeeded()
+    }
+
+    private func setupOnboardingIfNeeded() {
+        let hasCompleted = UserDefaults.standard.bool(forKey: OnboardingViewController.onboardingCompletedKey)
+        guard !hasCompleted else { return }
+
+        let onboardingVC = OnboardingViewController()
+        self.onboardingViewController = onboardingVC
+
+        onboardingVC.onCompletion = { [weak self, weak onboardingVC] in
+            guard let self = self, let onboardingVC = onboardingVC else { return }
+            UIView.animate(withDuration: 0.35, delay: 0, options: [.curveEaseInOut], animations: {
+                onboardingVC.view.alpha = 0
+            }) { _ in
+                onboardingVC.willMove(toParent: nil)
+                onboardingVC.view.removeFromSuperview()
+                onboardingVC.removeFromParent()
+                self.onboardingViewController = nil
+            }
+        }
+
+        addChild(onboardingVC)
+        view.addSubview(onboardingVC.view)
+        onboardingVC.view.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            onboardingVC.view.topAnchor.constraint(equalTo: view.topAnchor),
+            onboardingVC.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            onboardingVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            onboardingVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+
+        onboardingVC.didMove(toParent: self)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         // Ensure any overlay splash view matches the full container bounds on rotation/layout
-        for subview in view.subviews where subview !== bridgeViewController.view {
+        for subview in view.subviews where subview !== bridgeViewController.view && subview !== onboardingViewController?.view {
             subview.frame = view.bounds
         }
     }
 
     // Forward status bar style and visibility
     override var childForStatusBarStyle: UIViewController? {
-        return bridgeViewController
+        return onboardingViewController ?? bridgeViewController
     }
 
     override var childForStatusBarHidden: UIViewController? {
