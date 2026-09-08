@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.ImageButton;
+import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatButton;
@@ -40,7 +40,6 @@ public class MainActivity extends BridgeActivity {
         ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (view, windowInsets) -> {
             // Keep the system bar areas white
             view.setBackgroundColor(Color.WHITE);
-
             return windowInsets;
         });
 
@@ -88,28 +87,43 @@ public class MainActivity extends BridgeActivity {
         ));
 
         ViewPager2 viewPager = onboardingContainer.findViewById(R.id.viewPager);
-        ImageButton btnLeftArrow = onboardingContainer.findViewById(R.id.btnLeftArrow);
-        ImageButton btnRightArrow = onboardingContainer.findViewById(R.id.btnRightArrow);
-        AppCompatButton btnGetStarted = onboardingContainer.findViewById(R.id.btnGetStarted);
+        TextView tvSkip = onboardingContainer.findViewById(R.id.tvSkip);
+        AppCompatButton btnPrimaryAction = onboardingContainer.findViewById(R.id.btnPrimaryAction);
+        TextView btnBack = onboardingContainer.findViewById(R.id.btnBack);
         View dot0 = onboardingContainer.findViewById(R.id.dot0);
         View dot1 = onboardingContainer.findViewById(R.id.dot1);
         View dot2 = onboardingContainer.findViewById(R.id.dot2);
 
         List<OnboardingSlide> slides = Arrays.asList(
             new OnboardingSlide(
-                R.drawable.app_logo,
-                "Welcome to Setli",
-                "Streamline your property maintenance, settlements, and updates all in one place."
+                R.drawable.onboarding1,
+                "ALL-IN-ONE RENT MANAGEMENT",
+                R.drawable.dot_blue,
+                R.drawable.bg_pill_blue,
+                0xFF1D61E7,
+                "Manage Your Rent, ",
+                "All in One Place",
+                "Collect rent, manage tenants, track payments, and keep your rental activity organized from one simple platform."
             ),
             new OnboardingSlide(
-                R.drawable.app_logo,
-                "Track & Manage Requests",
-                "Effortlessly submit maintenance issues, upload documentation, and receive real-time updates."
+                R.drawable.onboarding2,
+                "SMART PAYMENT TRACKING",
+                R.drawable.dot_blue,
+                R.drawable.bg_pill_blue,
+                0xFF1D61E7,
+                "Track Every Payment ",
+                "With Ease",
+                "Stay on top of rent collections, payment status, and tenant activity with simple tracking and helpful reminders."
             ),
             new OnboardingSlide(
-                R.drawable.app_logo,
-                "Seamless Settlement Experience",
-                "Connect directly with property managers and enjoy a stress-free transition."
+                R.drawable.onboarding3,
+                "REWARDS & SMARTER MANAGEMENT",
+                R.drawable.dot_amber,
+                R.drawable.bg_pill_amber,
+                0xFFD97706,
+                "Manage Smarter. ",
+                "Earn More.",
+                "Unlock rewards, discover useful insights, and make your rent management experience simpler and more rewarding."
             )
         );
 
@@ -119,33 +133,76 @@ public class MainActivity extends BridgeActivity {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                updateControls(position, true, btnLeftArrow, btnRightArrow, btnGetStarted, dot0, dot1, dot2);
+                updateControls(position, tvSkip, btnPrimaryAction, btnBack, dot0, dot1, dot2);
             }
         });
 
         // Initialize state for Index 0
-        updateControls(0, false, btnLeftArrow, btnRightArrow, btnGetStarted, dot0, dot1, dot2);
+        updateControls(0, tvSkip, btnPrimaryAction, btnBack, dot0, dot1, dot2);
 
-        btnLeftArrow.setOnClickListener(v -> {
+        tvSkip.setOnClickListener(v -> completeOnboarding(root));
+
+        btnBack.setOnClickListener(v -> {
             int current = viewPager.getCurrentItem();
             if (current > 0) {
                 viewPager.setCurrentItem(current - 1, true);
             }
         });
 
-        btnRightArrow.setOnClickListener(v -> {
+        btnPrimaryAction.setOnClickListener(v -> {
             int current = viewPager.getCurrentItem();
             if (current < slides.size() - 1) {
                 viewPager.setCurrentItem(current + 1, true);
+            } else {
+                completeOnboarding(root);
             }
         });
+    }
 
-        btnGetStarted.setOnClickListener(v -> {
-            getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-                .edit()
-                .putBoolean(KEY_COMPLETED_ONBOARDING, true)
-                .apply();
+    private void updateControls(
+        int index,
+        TextView tvSkip,
+        AppCompatButton btnPrimaryAction,
+        TextView btnBack,
+        View dot0,
+        View dot1,
+        View dot2
+    ) {
+        // Update Primary Action button text: "Next  ›" or "Get Started  ›"
+        btnPrimaryAction.setText(index == 2 ? "Get Started  ›" : "Next  ›");
 
+        // Update Skip button: hidden on the final slide
+        tvSkip.setVisibility(index == 2 ? View.GONE : View.VISIBLE);
+
+        // Update Back button: hidden on the first slide
+        btnBack.setVisibility(index > 0 ? View.VISIBLE : View.INVISIBLE);
+
+        // Update Indicator Dots (Pill expands to 22dp, circles are 6dp)
+        updateDot(dot0, index == 0);
+        updateDot(dot1, index == 1);
+        updateDot(dot2, index == 2);
+    }
+
+    private void updateDot(View dot, boolean isActive) {
+        ViewGroup.LayoutParams lp = dot.getLayoutParams();
+        if (lp != null) {
+            lp.width = dpToPx(isActive ? 22 : 6);
+            dot.setLayoutParams(lp);
+        }
+        dot.setBackgroundResource(isActive ? R.drawable.bg_indicator_active : R.drawable.bg_indicator_inactive);
+    }
+
+    private int dpToPx(int dp) {
+        return (int) (dp * getResources().getDisplayMetrics().density + 0.5f);
+    }
+
+    private void completeOnboarding(ViewGroup root) {
+        getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+            .edit()
+            .putBoolean(KEY_COMPLETED_ONBOARDING, true)
+            .apply();
+
+        if (onboardingContainer != null) {
             onboardingContainer.animate()
                 .alpha(0f)
                 .setDuration(300)
@@ -156,64 +213,6 @@ public class MainActivity extends BridgeActivity {
                     onboardingContainer = null;
                 })
                 .start();
-        });
-    }
-
-    private void updateControls(
-        int index,
-        boolean animate,
-        ImageButton btnLeft,
-        ImageButton btnRight,
-        AppCompatButton btnGetStarted,
-        View dot0,
-        View dot1,
-        View dot2
-    ) {
-        // Update indicator dots
-        dot0.setBackgroundResource(index == 0 ? R.drawable.bg_dot_active : R.drawable.bg_dot_inactive);
-        dot1.setBackgroundResource(index == 1 ? R.drawable.bg_dot_active : R.drawable.bg_dot_inactive);
-        dot2.setBackgroundResource(index == 2 ? R.drawable.bg_dot_active : R.drawable.bg_dot_inactive);
-
-        // Index 0: only bottom-right arrow
-        // Index 1: bottom-left arrow and right-side arrow
-        // Index 2: bottom-left arrow and 'Get Started' button
-        boolean showLeft = (index > 0);
-        boolean showRight = (index < 2);
-        boolean showGetStarted = (index == 2);
-
-        if (animate) {
-            // Left Button
-            if (showLeft) {
-                btnLeft.setVisibility(View.VISIBLE);
-                btnLeft.animate().alpha(1f).setDuration(200).start();
-            } else {
-                btnLeft.animate().alpha(0f).setDuration(200).withEndAction(() -> btnLeft.setVisibility(View.INVISIBLE)).start();
-            }
-
-            // Right Arrow Button
-            if (showRight) {
-                btnRight.setVisibility(View.VISIBLE);
-                btnRight.animate().alpha(1f).setDuration(200).start();
-            } else {
-                btnRight.animate().alpha(0f).setDuration(200).withEndAction(() -> btnRight.setVisibility(View.GONE)).start();
-            }
-
-            // Get Started Button
-            if (showGetStarted) {
-                btnGetStarted.setVisibility(View.VISIBLE);
-                btnGetStarted.animate().alpha(1f).setDuration(200).start();
-            } else {
-                btnGetStarted.animate().alpha(0f).setDuration(200).withEndAction(() -> btnGetStarted.setVisibility(View.GONE)).start();
-            }
-        } else {
-            btnLeft.setAlpha(showLeft ? 1f : 0f);
-            btnLeft.setVisibility(showLeft ? View.VISIBLE : View.INVISIBLE);
-
-            btnRight.setAlpha(showRight ? 1f : 0f);
-            btnRight.setVisibility(showRight ? View.VISIBLE : View.GONE);
-
-            btnGetStarted.setAlpha(showGetStarted ? 1f : 0f);
-            btnGetStarted.setVisibility(showGetStarted ? View.VISIBLE : View.GONE);
         }
     }
 }
