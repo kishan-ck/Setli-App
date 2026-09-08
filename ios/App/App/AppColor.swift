@@ -30,23 +30,23 @@ public enum AppColor: CaseIterable {
     public var hex: String {
         switch self {
         case .primaryBlue, .badgeBlueText, .indicatorActive:
-            return "#1D61E7"
+            return "#0056FE"
         case .textPrimaryDark:
-            return "#141C28"
+            return "#0B1D3A"
         case .textSecondaryGray:
-            return "#6B7585"
+            return "#5A7A9A"
         case .textMutedGray:
-            return "#8592A6"
+            return "#6B8CAE"
         case .badgeBlueBg:
-            return "#EEF4FF"
+            return "#EBF3FF"
         case .badgeAmberBg:
-            return "#FFF6EB"
+            return "#FFF7ED"
         case .badgeAmberDot:
             return "#F59E0B"
         case .badgeAmberText:
             return "#D97706"
         case .indicatorInactive:
-            return "#D1D7E3"
+            return "#BDD5EF"
         case .surfaceWhite:
             return "#FFFFFF"
         }

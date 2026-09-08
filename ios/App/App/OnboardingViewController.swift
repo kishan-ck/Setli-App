@@ -227,9 +227,9 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         OnboardingSlide(
             illustrationName: "Onboarding1",
             categoryText: "ALL-IN-ONE RENT MANAGEMENT",
-            categoryDotHex: AppColor.badgeBlueText.hex, // "#1D61E7"
-            categoryBgHex: AppColor.badgeBlueBg.hex,     // "#EEF4FF"
-            categoryTextHex: AppColor.badgeBlueText.hex, // "#1D61E7"
+            categoryDotHex: AppColor.badgeBlueText.hex,
+            categoryBgHex: AppColor.badgeBlueBg.hex,
+            categoryTextHex: AppColor.badgeBlueText.hex,
             titlePrefix: "Manage Your Rent, ",
             titleHighlight: "All in One Place",
             subtitle: "Collect rent, manage tenants, track payments, and keep your rental activity organized from one simple platform."
@@ -237,9 +237,9 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         OnboardingSlide(
             illustrationName: "Onboarding2",
             categoryText: "SMART PAYMENT TRACKING",
-            categoryDotHex: AppColor.badgeBlueText.hex, // "#1D61E7"
-            categoryBgHex: AppColor.badgeBlueBg.hex,     // "#EEF4FF"
-            categoryTextHex: AppColor.badgeBlueText.hex, // "#1D61E7"
+            categoryDotHex: AppColor.badgeBlueText.hex,
+            categoryBgHex: AppColor.badgeBlueBg.hex,
+            categoryTextHex: AppColor.badgeBlueText.hex,
             titlePrefix: "Track Every Payment ",
             titleHighlight: "With Ease",
             subtitle: "Stay on top of rent collections, payment status, and tenant activity with simple tracking and helpful reminders."
@@ -247,9 +247,9 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         OnboardingSlide(
             illustrationName: "Onboarding3",
             categoryText: "REWARDS & SMARTER MANAGEMENT",
-            categoryDotHex: AppColor.badgeAmberDot.hex,  // "#F59E0B"
-            categoryBgHex: AppColor.badgeAmberBg.hex,    // "#FFF6EB"
-            categoryTextHex: AppColor.badgeAmberText.hex, // "#D97706"
+            categoryDotHex: AppColor.badgeAmberDot.hex,
+            categoryBgHex: AppColor.badgeAmberBg.hex,
+            categoryTextHex: AppColor.badgeAmberText.hex,
             titlePrefix: "Manage Smarter. ",
             titleHighlight: "Earn More.",
             subtitle: "Unlock rewards, discover useful insights, and make your rent management experience simpler and more rewarding."
@@ -257,9 +257,9 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         OnboardingSlide(
             illustrationName: "Onboarding4",
             categoryText: "FOR HOSTS & LANDLORDS",
-            categoryDotHex: AppColor.badgeAmberDot.hex,  // "#F59E0B"
-            categoryBgHex: AppColor.badgeAmberBg.hex,    // "#FFF6EB"
-            categoryTextHex: AppColor.badgeAmberText.hex, // "#D97706"
+            categoryDotHex: AppColor.badgeBlueText.hex,
+            categoryBgHex: AppColor.badgeBlueBg.hex,
+            categoryTextHex: AppColor.badgeBlueText.hex,
             titlePrefix: "Manage Your Properties ",
             titleHighlight: "With Ease",
             subtitle: "List properties, manage tenants, track rent and stay on top of your property activity from one simple platform."
@@ -267,9 +267,9 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         OnboardingSlide(
             illustrationName: "Onboarding5",
             categoryText: "FOR TENANTS",
-            categoryDotHex: AppColor.badgeAmberDot.hex,  // "#F59E0B"
-            categoryBgHex: AppColor.badgeAmberBg.hex,    // "#FFF6EB"
-            categoryTextHex: AppColor.badgeAmberText.hex, // "#D97706"
+            categoryDotHex: AppColor.badgeBlueText.hex,
+            categoryBgHex: AppColor.badgeBlueBg.hex,
+            categoryTextHex: AppColor.badgeBlueText.hex,
             titlePrefix: "Your Rental Life, ",
             titleHighlight: "Made Simple",
             subtitle: "Find your rental information, manage payments, stay connected with your host and keep everything organized in one place."
@@ -405,7 +405,7 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         // Primary Action Button ("Next >" or "Get Started >")
         primaryActionButton.translatesAutoresizingMaskIntoConstraints = false
         primaryActionButton.backgroundColor = AppColor.primaryBlue.color
-        primaryActionButton.layer.cornerRadius = 27
+        primaryActionButton.layer.cornerRadius = 16
         primaryActionButton.setTitleColor(.white, for: .normal)
         primaryActionButton.titleLabel?.font = AppFont.bold(size: 16)
 
@@ -428,8 +428,8 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         let chevronLeft = UIImage(systemName: "chevron.left", withConfiguration: UIImage.SymbolConfiguration(pointSize: 12, weight: .bold))
         backButton.setImage(chevronLeft, for: .normal)
         backButton.setTitle(" Back", for: .normal)
-        backButton.tintColor = AppColor.textSecondaryGray.color
-        backButton.setTitleColor(AppColor.textSecondaryGray.color, for: .normal)
+        backButton.tintColor = AppColor.textMutedGray.color
+        backButton.setTitleColor(AppColor.textMutedGray.color, for: .normal)
         backButton.titleLabel?.font = AppFont.semiBold(size: 14)
         backButton.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
         secondaryRowView.addSubview(backButton)
