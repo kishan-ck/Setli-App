@@ -106,7 +106,7 @@ class OnboardingCell: UICollectionViewCell {
         categoryPillStack.addArrangedSubview(categoryLabel)
 
         categoryPillContainer.translatesAutoresizingMaskIntoConstraints = false
-        categoryPillContainer.layer.cornerRadius = 12
+        categoryPillContainer.layer.cornerRadius = 18
         categoryPillContainer.clipsToBounds = true
         categoryPillContainer.addSubview(categoryPillStack)
 
@@ -120,17 +120,17 @@ class OnboardingCell: UICollectionViewCell {
         subtitleLabel.numberOfLines = 0
         subtitleLabel.textAlignment = .left
 
-        // Text Stack (Left aligned)
+        // Text Stack (Left aligned, pinned to bottom)
         textStack.translatesAutoresizingMaskIntoConstraints = false
         textStack.axis = .vertical
         textStack.alignment = .leading
         textStack.distribution = .fill
-        textStack.spacing = 12
+        textStack.spacing = 0
 
         textStack.addArrangedSubview(categoryPillContainer)
-        textStack.setCustomSpacing(10, after: categoryPillContainer)
+        textStack.setCustomSpacing(16, after: categoryPillContainer)
         textStack.addArrangedSubview(titleLabel)
-        textStack.setCustomSpacing(10, after: titleLabel)
+        textStack.setCustomSpacing(12, after: titleLabel)
         textStack.addArrangedSubview(subtitleLabel)
 
         contentView.addSubview(textStack)
@@ -144,17 +144,19 @@ class OnboardingCell: UICollectionViewCell {
             categoryPillStack.bottomAnchor.constraint(equalTo: categoryPillContainer.bottomAnchor, constant: -5),
             categoryPillStack.leadingAnchor.constraint(equalTo: categoryPillContainer.leadingAnchor, constant: 10),
             categoryPillStack.trailingAnchor.constraint(equalTo: categoryPillContainer.trailingAnchor, constant: -10),
+            categoryPillStack.heightAnchor.constraint(equalToConstant: 25),
 
-            // Illustration image view
+            // Text content stack pinned to bottom
+            textStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            textStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+
+            // Illustration image view centered in upper remaining space
             illustrationImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             illustrationImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
             illustrationImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
-            illustrationImageView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.46),
-
-            // Text content stack
-            textStack.topAnchor.constraint(equalTo: illustrationImageView.bottomAnchor, constant: 20),
-            textStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24)
+            illustrationImageView.bottomAnchor.constraint(equalTo: textStack.topAnchor, constant: -20),
+            illustrationImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
         ])
     }
 
@@ -297,6 +299,9 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
     private var dotViews: [UIView] = []
     private var dotWidthConstraints: [NSLayoutConstraint] = []
 
+    // Background Gradient Layer (matching Android bg_gradient.xml)
+    private let backgroundGradientLayer = CAGradientLayer()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -312,8 +317,7 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
     }
 
     private func setupUI() {
-        view.backgroundColor = .white
-
+        setupBackgroundGradient()
         setupHeader()
         setupCollectionView()
         setupBottomControls()
@@ -338,6 +342,23 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         ])
     }
 
+    private func setupBackgroundGradient() {
+        // CSS: linear-gradient(175deg, #EBF3FF 3.67%, #F4F9FF 45.37%, #FFFFFF 96.33%)
+        backgroundGradientLayer.colors = [
+            UIColor(hex: "#EBF3FF").cgColor,
+            UIColor(hex: "#F4F9FF").cgColor,
+            UIColor(hex: "#FFFFFF").cgColor
+        ]
+        backgroundGradientLayer.locations = [0.0367, 0.4537, 0.9633]
+        
+        // CSS 175deg angle calculation:
+        // dx = sin(175°) ≈ 0.0872, dy = -cos(175°) ≈ 0.9962
+        // start = (0.5 - 0.5*dx, 0.5 - 0.5*dy), end = (0.5 + 0.5*dx, 0.5 + 0.5*dy)
+        backgroundGradientLayer.startPoint = CGPoint(x: 0.456, y: 0.002)
+        backgroundGradientLayer.endPoint = CGPoint(x: 0.544, y: 0.998)
+        view.layer.insertSublayer(backgroundGradientLayer, at: 0)
+    }
+
     private func setupHeader() {
         headerView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(headerView)
@@ -346,15 +367,15 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         logoImageView.translatesAutoresizingMaskIntoConstraints = false
         logoImageView.contentMode = .scaleAspectFit
         logoImageView.clipsToBounds = true
-        logoImageView.image = UIImage(named: "AppLogo")
+        logoImageView.image = UIImage(named: "SetliIcon")
         headerView.addSubview(logoImageView)
 
-        // Brand Name "Setli"
+        /*// Brand Name "Setli"
         brandNameLabel.translatesAutoresizingMaskIntoConstraints = false
         brandNameLabel.text = "Setli"
         brandNameLabel.font = AppFont.bold(size: 22)
         brandNameLabel.textColor = AppColor.textPrimaryDark.color
-        headerView.addSubview(brandNameLabel)
+        headerView.addSubview(brandNameLabel)*/
 
         // Skip Button
         skipButton.translatesAutoresizingMaskIntoConstraints = false
@@ -367,11 +388,11 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         NSLayoutConstraint.activate([
             logoImageView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
             logoImageView.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
-            logoImageView.widthAnchor.constraint(equalToConstant: 30),
-            logoImageView.heightAnchor.constraint(equalToConstant: 30),
+            logoImageView.widthAnchor.constraint(equalToConstant: 84),
+            logoImageView.heightAnchor.constraint(equalToConstant: 26),
 
-            brandNameLabel.leadingAnchor.constraint(equalTo: logoImageView.trailingAnchor, constant: 8),
-            brandNameLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
+            /*brandNameLabel.leadingAnchor.constraint(equalTo: logoImageView.trailingAnchor, constant: 8),
+            brandNameLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),*/
 
             skipButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor),
             skipButton.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
@@ -390,7 +411,7 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.isPagingEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .clear
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(OnboardingCell.self, forCellWithReuseIdentifier: OnboardingCell.reuseIdentifier)
@@ -577,6 +598,7 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        backgroundGradientLayer.frame = view.bounds
         collectionView.collectionViewLayout.invalidateLayout()
     }
 

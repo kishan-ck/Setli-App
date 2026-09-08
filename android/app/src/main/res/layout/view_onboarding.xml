@@ -66,7 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="54dp"
             android:background="@drawable/bg_button_blue"
-            android:elevation="4dp"
+            android:elevation="3dp"
             android:stateListAnimator="@null"
             android:text="Next  ›"
             android:textAllCaps="false"
@@ -89,9 +89,9 @@
                 android:layout_alignParentStart="true"
                 android:gravity="center_vertical"
                 android:text="‹  Back"
-                android:textColor="#6B7280"
+                android:textColor="#6B8CAE"
                 android:textSize="14sp"
-                android:textStyle="bold"
+                android:fontFamily="@font/plus_jakarta_sans_semi_bold"
                 android:visibility="invisible" />
 
             <!-- Page Indicator Dots Container -->
