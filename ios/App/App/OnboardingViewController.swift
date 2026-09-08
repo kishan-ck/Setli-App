@@ -56,7 +56,7 @@ class OnboardingCell: UICollectionViewCell {
         categoryDotView.clipsToBounds = true
 
         categoryLabel.translatesAutoresizingMaskIntoConstraints = false
-        categoryLabel.font = UIFont.systemFont(ofSize: 11, weight: .bold)
+        categoryLabel.font = AppFont.bold(size: 10)
 
         categoryPillStack.translatesAutoresizingMaskIntoConstraints = false
         categoryPillStack.axis = .horizontal
@@ -134,7 +134,7 @@ class OnboardingCell: UICollectionViewCell {
 
         // Dual-color Title (Black + Brand Blue)
         let titleAttr = NSMutableAttributedString()
-        let boldFont = UIFont.systemFont(ofSize: 26, weight: .bold)
+        let boldFont = AppFont.extraBold(size: 28)
 
         let prefixPart = NSAttributedString(
             string: slide.titlePrefix,
@@ -164,7 +164,7 @@ class OnboardingCell: UICollectionViewCell {
         let attributedSubtitle = NSAttributedString(
             string: slide.subtitle,
             attributes: [
-                .font: UIFont.systemFont(ofSize: 15, weight: .regular),
+                .font: AppFont.regular(size: 15),
                 .foregroundColor: UIColor(red: 0.42, green: 0.46, blue: 0.52, alpha: 1.0), // #6B7585
                 .paragraphStyle: paragraphStyle
             ]
@@ -213,6 +213,26 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
             titlePrefix: "Manage Smarter. ",
             titleHighlight: "Earn More.",
             subtitle: "Unlock rewards, discover useful insights, and make your rent management experience simpler and more rewarding."
+        ),
+        OnboardingSlide(
+            illustrationName: "Onboarding4",
+            categoryText: "FOR HOSTS & LANDLORDS",
+            categoryDotColor: UIColor(red: 0.96, green: 0.62, blue: 0.07, alpha: 1.0),
+            categoryBgColor: UIColor(red: 1.0, green: 0.96, blue: 0.92, alpha: 1.0),
+            categoryTextColor: UIColor(red: 0.85, green: 0.47, blue: 0.02, alpha: 1.0),
+            titlePrefix: "Manage Your Properties ",
+            titleHighlight: "With Ease",
+            subtitle: "List properties, manage tenants, track rent and stay on top of your property activity from one simple platform."
+        ),
+        OnboardingSlide(
+            illustrationName: "Onboarding5",
+            categoryText: "FOR TENANTS",
+            categoryDotColor: UIColor(red: 0.96, green: 0.62, blue: 0.07, alpha: 1.0),
+            categoryBgColor: UIColor(red: 1.0, green: 0.96, blue: 0.92, alpha: 1.0),
+            categoryTextColor: UIColor(red: 0.85, green: 0.47, blue: 0.02, alpha: 1.0),
+            titlePrefix: "Your Rental Life, ",
+            titleHighlight: "Made Simple",
+            subtitle: "Find your rental information, manage payments, stay connected with your host and keep everything organized in one place."
         )
     ]
 
@@ -292,7 +312,7 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         // Brand Name "Setli"
         brandNameLabel.translatesAutoresizingMaskIntoConstraints = false
         brandNameLabel.text = "Setli"
-        brandNameLabel.font = UIFont.systemFont(ofSize: 22, weight: .bold)
+        brandNameLabel.font = AppFont.bold(size: 22)
         brandNameLabel.textColor = UIColor(red: 0.08, green: 0.11, blue: 0.16, alpha: 1.0)
         headerView.addSubview(brandNameLabel)
 
@@ -300,7 +320,7 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         skipButton.translatesAutoresizingMaskIntoConstraints = false
         skipButton.setTitle("Skip", for: .normal)
         skipButton.setTitleColor(UIColor(red: 0.52, green: 0.57, blue: 0.65, alpha: 1.0), for: .normal)
-        skipButton.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .medium)
+        skipButton.titleLabel?.font = AppFont.semiBold(size: 14)
         skipButton.addTarget(self, action: #selector(skipTapped), for: .touchUpInside)
         headerView.addSubview(skipButton)
 
@@ -347,7 +367,7 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         primaryActionButton.backgroundColor = UIColor(red: 0.11, green: 0.38, blue: 0.91, alpha: 1.0) // #1D61E7
         primaryActionButton.layer.cornerRadius = 27
         primaryActionButton.setTitleColor(.white, for: .normal)
-        primaryActionButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        primaryActionButton.titleLabel?.font = AppFont.bold(size: 16)
 
         // Soft elevation shadow
         primaryActionButton.layer.shadowColor = UIColor(red: 0.11, green: 0.38, blue: 0.91, alpha: 0.35).cgColor
@@ -370,7 +390,7 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         backButton.setTitle(" Back", for: .normal)
         backButton.tintColor = UIColor(red: 0.42, green: 0.46, blue: 0.52, alpha: 1.0)
         backButton.setTitleColor(UIColor(red: 0.42, green: 0.46, blue: 0.52, alpha: 1.0), for: .normal)
-        backButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        backButton.titleLabel?.font = AppFont.semiBold(size: 14)
         backButton.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
         secondaryRowView.addSubview(backButton)
 
