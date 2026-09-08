@@ -16,6 +16,46 @@ struct OnboardingSlide {
     let titlePrefix: String
     let titleHighlight: String
     let subtitle: String
+
+    init(
+        illustrationName: String,
+        categoryText: String,
+        categoryDotHex: String,
+        categoryBgHex: String,
+        categoryTextHex: String,
+        titlePrefix: String,
+        titleHighlight: String,
+        subtitle: String
+    ) {
+        self.illustrationName = illustrationName
+        self.categoryText = categoryText
+        self.categoryDotColor = UIColor(hex: categoryDotHex)
+        self.categoryBgColor = UIColor(hex: categoryBgHex)
+        self.categoryTextColor = UIColor(hex: categoryTextHex)
+        self.titlePrefix = titlePrefix
+        self.titleHighlight = titleHighlight
+        self.subtitle = subtitle
+    }
+
+    init(
+        illustrationName: String,
+        categoryText: String,
+        categoryDotColor: UIColor,
+        categoryBgColor: UIColor,
+        categoryTextColor: UIColor,
+        titlePrefix: String,
+        titleHighlight: String,
+        subtitle: String
+    ) {
+        self.illustrationName = illustrationName
+        self.categoryText = categoryText
+        self.categoryDotColor = categoryDotColor
+        self.categoryBgColor = categoryBgColor
+        self.categoryTextColor = categoryTextColor
+        self.titlePrefix = titlePrefix
+        self.titleHighlight = titleHighlight
+        self.subtitle = subtitle
+    }
 }
 
 class OnboardingCell: UICollectionViewCell {
@@ -140,7 +180,7 @@ class OnboardingCell: UICollectionViewCell {
             string: slide.titlePrefix,
             attributes: [
                 .font: boldFont,
-                .foregroundColor: UIColor(red: 0.08, green: 0.11, blue: 0.16, alpha: 1.0) // #141C28
+                .foregroundColor: AppColor.textPrimaryDark.color
             ]
         )
 
@@ -148,7 +188,7 @@ class OnboardingCell: UICollectionViewCell {
             string: slide.titleHighlight,
             attributes: [
                 .font: boldFont,
-                .foregroundColor: UIColor(red: 0.11, green: 0.38, blue: 0.91, alpha: 1.0) // #1D61E7
+                .foregroundColor: AppColor.primaryBlue.color
             ]
         )
 
@@ -165,7 +205,7 @@ class OnboardingCell: UICollectionViewCell {
             string: slide.subtitle,
             attributes: [
                 .font: AppFont.regular(size: 15),
-                .foregroundColor: UIColor(red: 0.42, green: 0.46, blue: 0.52, alpha: 1.0), // #6B7585
+                .foregroundColor: AppColor.textSecondaryGray.color,
                 .paragraphStyle: paragraphStyle
             ]
         )
@@ -187,9 +227,9 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         OnboardingSlide(
             illustrationName: "Onboarding1",
             categoryText: "ALL-IN-ONE RENT MANAGEMENT",
-            categoryDotColor: UIColor(red: 0.11, green: 0.38, blue: 0.91, alpha: 1.0),
-            categoryBgColor: UIColor(red: 0.93, green: 0.95, blue: 1.0, alpha: 1.0),
-            categoryTextColor: UIColor(red: 0.11, green: 0.38, blue: 0.91, alpha: 1.0),
+            categoryDotHex: AppColor.badgeBlueText.hex, // "#1D61E7"
+            categoryBgHex: AppColor.badgeBlueBg.hex,     // "#EEF4FF"
+            categoryTextHex: AppColor.badgeBlueText.hex, // "#1D61E7"
             titlePrefix: "Manage Your Rent, ",
             titleHighlight: "All in One Place",
             subtitle: "Collect rent, manage tenants, track payments, and keep your rental activity organized from one simple platform."
@@ -197,9 +237,9 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         OnboardingSlide(
             illustrationName: "Onboarding2",
             categoryText: "SMART PAYMENT TRACKING",
-            categoryDotColor: UIColor(red: 0.11, green: 0.38, blue: 0.91, alpha: 1.0),
-            categoryBgColor: UIColor(red: 0.93, green: 0.95, blue: 1.0, alpha: 1.0),
-            categoryTextColor: UIColor(red: 0.11, green: 0.38, blue: 0.91, alpha: 1.0),
+            categoryDotHex: AppColor.badgeBlueText.hex, // "#1D61E7"
+            categoryBgHex: AppColor.badgeBlueBg.hex,     // "#EEF4FF"
+            categoryTextHex: AppColor.badgeBlueText.hex, // "#1D61E7"
             titlePrefix: "Track Every Payment ",
             titleHighlight: "With Ease",
             subtitle: "Stay on top of rent collections, payment status, and tenant activity with simple tracking and helpful reminders."
@@ -207,9 +247,9 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         OnboardingSlide(
             illustrationName: "Onboarding3",
             categoryText: "REWARDS & SMARTER MANAGEMENT",
-            categoryDotColor: UIColor(red: 0.96, green: 0.62, blue: 0.07, alpha: 1.0),
-            categoryBgColor: UIColor(red: 1.0, green: 0.96, blue: 0.92, alpha: 1.0),
-            categoryTextColor: UIColor(red: 0.85, green: 0.47, blue: 0.02, alpha: 1.0),
+            categoryDotHex: AppColor.badgeAmberDot.hex,  // "#F59E0B"
+            categoryBgHex: AppColor.badgeAmberBg.hex,    // "#FFF6EB"
+            categoryTextHex: AppColor.badgeAmberText.hex, // "#D97706"
             titlePrefix: "Manage Smarter. ",
             titleHighlight: "Earn More.",
             subtitle: "Unlock rewards, discover useful insights, and make your rent management experience simpler and more rewarding."
@@ -217,9 +257,9 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         OnboardingSlide(
             illustrationName: "Onboarding4",
             categoryText: "FOR HOSTS & LANDLORDS",
-            categoryDotColor: UIColor(red: 0.96, green: 0.62, blue: 0.07, alpha: 1.0),
-            categoryBgColor: UIColor(red: 1.0, green: 0.96, blue: 0.92, alpha: 1.0),
-            categoryTextColor: UIColor(red: 0.85, green: 0.47, blue: 0.02, alpha: 1.0),
+            categoryDotHex: AppColor.badgeAmberDot.hex,  // "#F59E0B"
+            categoryBgHex: AppColor.badgeAmberBg.hex,    // "#FFF6EB"
+            categoryTextHex: AppColor.badgeAmberText.hex, // "#D97706"
             titlePrefix: "Manage Your Properties ",
             titleHighlight: "With Ease",
             subtitle: "List properties, manage tenants, track rent and stay on top of your property activity from one simple platform."
@@ -227,9 +267,9 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         OnboardingSlide(
             illustrationName: "Onboarding5",
             categoryText: "FOR TENANTS",
-            categoryDotColor: UIColor(red: 0.96, green: 0.62, blue: 0.07, alpha: 1.0),
-            categoryBgColor: UIColor(red: 1.0, green: 0.96, blue: 0.92, alpha: 1.0),
-            categoryTextColor: UIColor(red: 0.85, green: 0.47, blue: 0.02, alpha: 1.0),
+            categoryDotHex: AppColor.badgeAmberDot.hex,  // "#F59E0B"
+            categoryBgHex: AppColor.badgeAmberBg.hex,    // "#FFF6EB"
+            categoryTextHex: AppColor.badgeAmberText.hex, // "#D97706"
             titlePrefix: "Your Rental Life, ",
             titleHighlight: "Made Simple",
             subtitle: "Find your rental information, manage payments, stay connected with your host and keep everything organized in one place."
@@ -313,13 +353,13 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         brandNameLabel.translatesAutoresizingMaskIntoConstraints = false
         brandNameLabel.text = "Setli"
         brandNameLabel.font = AppFont.bold(size: 22)
-        brandNameLabel.textColor = UIColor(red: 0.08, green: 0.11, blue: 0.16, alpha: 1.0)
+        brandNameLabel.textColor = AppColor.textPrimaryDark.color
         headerView.addSubview(brandNameLabel)
 
         // Skip Button
         skipButton.translatesAutoresizingMaskIntoConstraints = false
         skipButton.setTitle("Skip", for: .normal)
-        skipButton.setTitleColor(UIColor(red: 0.52, green: 0.57, blue: 0.65, alpha: 1.0), for: .normal)
+        skipButton.setTitleColor(AppColor.textMutedGray.color, for: .normal)
         skipButton.titleLabel?.font = AppFont.semiBold(size: 14)
         skipButton.addTarget(self, action: #selector(skipTapped), for: .touchUpInside)
         headerView.addSubview(skipButton)
@@ -364,13 +404,13 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
 
         // Primary Action Button ("Next >" or "Get Started >")
         primaryActionButton.translatesAutoresizingMaskIntoConstraints = false
-        primaryActionButton.backgroundColor = UIColor(red: 0.11, green: 0.38, blue: 0.91, alpha: 1.0) // #1D61E7
+        primaryActionButton.backgroundColor = AppColor.primaryBlue.color
         primaryActionButton.layer.cornerRadius = 27
         primaryActionButton.setTitleColor(.white, for: .normal)
         primaryActionButton.titleLabel?.font = AppFont.bold(size: 16)
 
         // Soft elevation shadow
-        primaryActionButton.layer.shadowColor = UIColor(red: 0.11, green: 0.38, blue: 0.91, alpha: 0.35).cgColor
+        primaryActionButton.layer.shadowColor = AppColor.primaryBlue.withAlpha(0.35).cgColor
         primaryActionButton.layer.shadowOffset = CGSize(width: 0, height: 6)
         primaryActionButton.layer.shadowRadius = 12
         primaryActionButton.layer.shadowOpacity = 1
@@ -388,8 +428,8 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         let chevronLeft = UIImage(systemName: "chevron.left", withConfiguration: UIImage.SymbolConfiguration(pointSize: 12, weight: .bold))
         backButton.setImage(chevronLeft, for: .normal)
         backButton.setTitle(" Back", for: .normal)
-        backButton.tintColor = UIColor(red: 0.42, green: 0.46, blue: 0.52, alpha: 1.0)
-        backButton.setTitleColor(UIColor(red: 0.42, green: 0.46, blue: 0.52, alpha: 1.0), for: .normal)
+        backButton.tintColor = AppColor.textSecondaryGray.color
+        backButton.setTitleColor(AppColor.textSecondaryGray.color, for: .normal)
         backButton.titleLabel?.font = AppFont.semiBold(size: 14)
         backButton.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
         secondaryRowView.addSubview(backButton)
@@ -401,13 +441,13 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
         dotsContainer.spacing = 6
         secondaryRowView.addSubview(dotsContainer)
 
-        // Build 3 Indicator Dots
+        // Build Indicator Dots
         for i in 0..<slides.count {
             let dot = UIView()
             dot.translatesAutoresizingMaskIntoConstraints = false
             dot.layer.cornerRadius = 3
             dot.clipsToBounds = true
-            dot.backgroundColor = (i == 0) ? UIColor(red: 0.11, green: 0.38, blue: 0.91, alpha: 1.0) : UIColor(red: 0.82, green: 0.85, blue: 0.90, alpha: 1.0)
+            dot.backgroundColor = (i == 0) ? AppColor.indicatorActive.color : AppColor.indicatorInactive.color
 
             let widthConstraint = dot.widthAnchor.constraint(equalToConstant: (i == 0) ? 22 : 6)
             widthConstraint.isActive = true
@@ -469,11 +509,11 @@ class OnboardingViewController: UIViewController, UICollectionViewDataSource, UI
 
             if animated {
                 UIView.animate(withDuration: 0.25, delay: 0, options: [.curveEaseInOut], animations: {
-                    dot.backgroundColor = isActive ? UIColor(red: 0.11, green: 0.38, blue: 0.91, alpha: 1.0) : UIColor(red: 0.82, green: 0.85, blue: 0.90, alpha: 1.0)
+                    dot.backgroundColor = isActive ? AppColor.indicatorActive.color : AppColor.indicatorInactive.color
                     self.dotsContainer.layoutIfNeeded()
                 })
             } else {
-                dot.backgroundColor = isActive ? UIColor(red: 0.11, green: 0.38, blue: 0.91, alpha: 1.0) : UIColor(red: 0.82, green: 0.85, blue: 0.90, alpha: 1.0)
+                dot.backgroundColor = isActive ? AppColor.indicatorActive.color : AppColor.indicatorInactive.color
                 self.dotsContainer.layoutIfNeeded()
             }
         }
