@@ -1,5 +1,6 @@
 package com.setli.app;
 
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.webkit.WebView;
@@ -29,10 +30,24 @@ public class MainActivity extends BridgeActivity {
                 if (webView.canGoBack()) {
                     webView.goBack();
                 } else {
-                    setEnabled(false);
-                    getOnBackPressedDispatcher().onBackPressed();
+                    showExitConfirmationDialog();
+//                    setEnabled(false);
+//                    getOnBackPressedDispatcher().onBackPressed();
                 }
             }
         });
+    }
+    private void showExitConfirmationDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Exit App")
+                .setMessage("Are you sure you want to exit the app?")
+                .setNegativeButton("Cancel", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .setPositiveButton("Exit", (dialog, which) -> {
+                    finishAffinity();
+                })
+                .setCancelable(false)
+                .show();
     }
 }
