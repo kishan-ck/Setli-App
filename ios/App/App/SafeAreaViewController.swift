@@ -13,6 +13,8 @@ class AppBridgeViewController: CAPBridgeViewController {
     weak var container: SafeAreaViewController?
 
     override func webView(with frame: CGRect, configuration: WKWebViewConfiguration) -> WKWebView {
+        configuration.userContentController.addUserScript(DownloadManager.injectedUserScript)
+        configuration.userContentController.add(DownloadManager.shared, name: "downloadHandler")
         let customWebView = AppWebView(frame: frame, configuration: configuration)
         customWebView.container = container
         return customWebView
@@ -67,6 +69,15 @@ class SafeAreaViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        DownloadManager.shared.configure(presentingViewController: self)
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleCapacitorNavigationAction(_:)),
+            name: .capacitorDecidePolicyForNavigationAction,
+            object: nil
+        )
+
         // Background color behind the status bar and home indicator areas
         if #available(iOS 13.0, *) {
             view.backgroundColor = .systemBackground
@@ -91,6 +102,20 @@ class SafeAreaViewController: UIViewController {
 
         // Setup onboarding if not yet completed
         setupOnboardingIfNeeded()
+    }
+
+    @objc private func handleCapacitorNavigationAction(_ notification: Notification) {
+        guard let navigationAction = notification.object as? WKNavigationAction,
+              let url = navigationAction.request.url else { return }
+
+        let urlString = url.absoluteString
+        if urlString.hasPrefix("data:image/") {
+            DownloadManager.shared.handleDownload(urlString: urlString)
+        }
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     private func setupOnboardingIfNeeded() {
@@ -128,8 +153,8 @@ class SafeAreaViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        // Ensure any overlay splash view matches the full container bounds on rotation/layout
-        for subview in view.subviews where subview !== bridgeViewController.view && subview !== onboardingViewController?.view {
+        // Ensure only unconstrained overlay splash views match full container bounds
+        for subview in view.subviews where subview !== bridgeViewController.view && subview !== onboardingViewController?.view && subview.translatesAutoresizingMaskIntoConstraints {
             subview.frame = view.bounds
         }
     }

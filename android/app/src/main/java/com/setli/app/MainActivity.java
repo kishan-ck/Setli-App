@@ -1,20 +1,34 @@
 package com.setli.app;
 
 import android.app.AlertDialog;
+import android.app.DownloadManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
 import android.webkit.WebView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.view.ViewCompat;
 import androidx.viewpager2.widget.ViewPager2;
 import com.getcapacitor.BridgeActivity;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -66,6 +80,145 @@ public class MainActivity extends BridgeActivity {
 //                    setEnabled(false);
 //                    getOnBackPressedDispatcher().onBackPressed();
                 }
+            }
+        });
+
+        WebView webView = getBridge().getWebView();
+
+        webView.setDownloadListener((url, userAgent, contentDisposition, mimeType, contentLength) -> {
+
+            // ==============================
+            // BASE64 IMAGE DOWNLOAD
+            // ==============================
+            if (url != null && url.startsWith("data:image/")) {
+                try {
+                    // Example:
+                    // data:image/png;base64,iVBORw0KGgoAAAANS...
+
+                    String[] parts = url.split(",", 2);
+
+                    if (parts.length != 2) {
+                        Toast.makeText(this, "Invalid image data", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // Get MIME type
+                    String header = parts[0];
+                    String base64Data = parts[1];
+                    String imageType = "png";
+
+                    if (header.contains("image/jpeg")) {
+                        imageType = "jpg";
+                    } else if (header.contains("image/jpg")) {
+                        imageType = "jpg";
+                    } else if (header.contains("image/webp")) {
+                        imageType = "webp";
+                    } else if (header.contains("image/gif")) {
+                        imageType = "gif";
+                    }
+
+                    // Decode Base64
+                    byte[] imageBytes = Base64.decode(base64Data, Base64.DEFAULT);
+
+                    String fileName = "Setli_" + System.currentTimeMillis() + "." + imageType;
+
+                    // ==============================
+                    // ANDROID 10+
+                    // ==============================
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+                        ContentValues values = new ContentValues();
+                        values.put(MediaStore.Downloads.DISPLAY_NAME, fileName);
+                        values.put(MediaStore.Downloads.MIME_TYPE, "image/" + imageType);
+                        values.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/Setli");
+                        values.put(MediaStore.Downloads.IS_PENDING, 1);
+
+                        Uri imageUri = getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
+
+                        if (imageUri != null) {
+                            try (OutputStream outputStream = getContentResolver().openOutputStream(imageUri)) {
+                                if (outputStream != null) {
+                                    outputStream.write(imageBytes);
+                                    outputStream.flush();
+                                }
+                            }
+
+                            values.clear();
+                            values.put(MediaStore.Downloads.IS_PENDING, 0);
+
+                            getContentResolver().update(imageUri, values, null, null);
+
+                            Toast.makeText(this, "Image downloaded successfully", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        // ==============================
+                        // ANDROID 9 AND BELOW
+                        // ==============================
+                        File picturesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                        File setliDir = new File(picturesDir, "Setli");
+
+                        if (!setliDir.exists()) {
+                            setliDir.mkdirs();
+                        }
+
+                        File imageFile = new File(setliDir, fileName);
+
+                        try (FileOutputStream outputStream = new FileOutputStream(imageFile)) {
+                            outputStream.write(imageBytes);
+                            outputStream.flush();
+                        }
+
+                        // Make image visible in Gallery
+                        MediaScannerConnection.scanFile(this, new String[]{imageFile.getAbsolutePath()}, new String[]{"image/" + imageType}, null);
+                        Toast.makeText(this, "Image downloaded successfully", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    Log.e("Download", "Base64 image download failed", e);
+                    Toast.makeText(this, "Unable to download image", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+
+            // ==============================
+            // NORMAL HTTP / HTTPS DOWNLOAD
+            // ==============================
+
+            if (url == null || !(url.startsWith("http://") || url.startsWith("https://"))) {
+
+                Log.d("Download", "Unsupported download URL: " + url);
+
+                return;
+            }
+
+            try {
+
+                DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+
+                request.setMimeType(mimeType);
+
+                String fileName = URLUtil.guessFileName(url, contentDisposition, mimeType);
+
+                request.addRequestHeader("User-Agent", userAgent);
+
+                request.setTitle(fileName);
+                request.setDescription("Downloading file...");
+
+                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+
+                DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+
+                downloadManager.enqueue(request);
+
+                Toast.makeText(this, "Download started", Toast.LENGTH_SHORT).show();
+
+            } catch (Exception e) {
+
+                Log.e("Download", "Download failed", e);
+
+                Toast.makeText(this, "Unable to download file", Toast.LENGTH_SHORT).show();
             }
         });
     }

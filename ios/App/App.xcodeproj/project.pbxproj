@@ -25,6 +25,8 @@
 		FA8CF9D830470F2200E9144E /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8CF9D730470F1F00E9144E /* OnboardingViewController.swift */; };
 		FA8CF9DA30470F2200E9144E /* AppFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8CF9D930470F1F00E9144E /* AppFont.swift */; };
 		FA8CF9DC30470F2200E9144E /* AppColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8CF9DB30470F1F00E9144E /* AppColor.swift */; };
+		FA8CF9DE30470F2200E9144E /* Snackbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8CF9DD30470F1F00E9144E /* Snackbar.swift */; };
+		FA8CF9E030470F2200E9144E /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8CF9DF30470F1F00E9144E /* DownloadManager.swift */; };
 		FAC931EF30499C0D0000C6D2 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = FAC931EE30499C0D0000C6D2 /* FirebaseMessaging */; };
 		FAC931F130499DF10000C6D2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAC931F030499DF10000C6D2 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
@@ -50,6 +52,8 @@
 		FA8CF9D730470F1F00E9144E /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		FA8CF9D930470F1F00E9144E /* AppFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFont.swift; sourceTree = "<group>"; };
 		FA8CF9DB30470F1F00E9144E /* AppColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColor.swift; sourceTree = "<group>"; };
+		FA8CF9DD30470F1F00E9144E /* Snackbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Snackbar.swift; sourceTree = "<group>"; };
+		FA8CF9DF30470F1F00E9144E /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		FAC931EC30499B6B0000C6D2 /* App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = App.entitlements; sourceTree = "<group>"; };
 		FAC931F030499DF10000C6D2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -93,6 +97,8 @@
 				FA8CF9D730470F1F00E9144E /* OnboardingViewController.swift */,
 				FA8CF9D930470F1F00E9144E /* AppFont.swift */,
 				FA8CF9DB30470F1F00E9144E /* AppColor.swift */,
+				FA8CF9DD30470F1F00E9144E /* Snackbar.swift */,
+				FA8CF9DF30470F1F00E9144E /* DownloadManager.swift */,
 				9582B6822FE993A50072D4E8 /* SceneDelegate.swift */,
 				50379B222058CBB4000EE86E /* capacitor.config.json */,
 				504EC3071FED79650016851F /* AppDelegate.swift */,
@@ -213,6 +219,8 @@
 				FA8CF9D830470F2200E9144E /* OnboardingViewController.swift in Sources */,
 				FA8CF9DA30470F2200E9144E /* AppFont.swift in Sources */,
 				FA8CF9DC30470F2200E9144E /* AppColor.swift in Sources */,
+				FA8CF9DE30470F2200E9144E /* Snackbar.swift in Sources */,
+				FA8CF9E030470F2200E9144E /* DownloadManager.swift in Sources */,
 				9582B6832FE993A70072D4E8 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

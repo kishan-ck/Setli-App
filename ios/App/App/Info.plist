@@ -32,6 +32,10 @@
 	<string>Setli allows saving images to your photo library when you download or store property-related photos.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Setli accesses your photo library to let you upload images for profiles, maintenance requests and property documentation.</string>
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
