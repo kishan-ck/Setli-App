@@ -12,14 +12,14 @@
     "sync": "node scripts/cap-cmd.js sync",
     "open": "node scripts/cap-cmd.js open",
     "run": "node scripts/cap-cmd.js run",
-    "android": "npx cap run android",
-    "ios": "npx cap run ios",
-    "sync:ios": "npx cap sync ios",
-    "sync:android": "npx cap sync android",
-    "open:ios": "npx cap open ios",
-    "open:android": "npx cap open android",
-    "run:ios": "npx cap run ios",
-    "run:android": "npx cap run android"
+    "android": "node scripts/cap-cmd.js run android",
+    "ios": "node scripts/cap-cmd.js run ios",
+    "sync:ios": "node scripts/cap-cmd.js sync ios",
+    "sync:android": "node scripts/cap-cmd.js sync android",
+    "open:ios": "node scripts/cap-cmd.js open ios",
+    "open:android": "node scripts/cap-cmd.js open android",
+    "run:ios": "node scripts/cap-cmd.js run ios",
+    "run:android": "node scripts/cap-cmd.js run android"
   },
   "repository": {
     "type": "git",

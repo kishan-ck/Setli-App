@@ -4,7 +4,7 @@
   "webDir": "www",
   "appendUserAgent": "SetliApp-WebView",
   "server": {
-    "url": "https://setli.com.au/login",
+    "url": "https://dev.setli.com.au/login",
     "allowNavigation": [
       "*.setli.com.au",
       "dev.setli.com.au",
