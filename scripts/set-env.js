@@ -124,12 +124,12 @@ try {
   // 7. Update iOS xcconfig files
   const envXcconfigs = {
     'env-local.xcconfig': {
-      SETLI_BUNDLE_ID_SUFFIX: '.local',
+      SETLI_BUNDLE_ID_SUFFIX: '',
       SETLI_DISPLAY_NAME: 'Setli LOCAL',
       SETLI_ENV: 'local'
     },
     'env-dev.xcconfig': {
-      SETLI_BUNDLE_ID_SUFFIX: '.dev',
+      SETLI_BUNDLE_ID_SUFFIX: '',
       SETLI_DISPLAY_NAME: 'Setli DEV',
       SETLI_ENV: 'dev'
     },
