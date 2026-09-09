@@ -40,15 +40,15 @@ npm run ios             # Builds & runs active environment on iOS device/simulat
 
 ### 3. Open in IDEs
 ```bash
-npm run open:android    # Open in Android Studio (standard 'debug' / 'release' automatically use active env!)
-npm run open:ios        # Open in Xcode (standard Run automatically uses active env!)
+npm run open:android || npm run open android    # Open in Android Studio (standard 'debug' / 'release' automatically use active env!)
+npm run open:ios || npm run open ios       # Open in Xcode (standard Run automatically uses active env!)
 ```
 
 ### 4. Manual Sync
 ```bash
 npm run sync            # Sync both Android & iOS
-npm run sync:android    # Sync Android only
-npm run sync:ios        # Sync iOS only
+npm run sync:android || npm run sync android    # Sync Android only
+npm run sync:ios || npm run sync ios       # Sync iOS only
 ```
 
 ---
