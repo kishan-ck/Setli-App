@@ -4,11 +4,14 @@
   "webDir": "www",
   "appendUserAgent": "SetliApp-WebView",
   "server": {
-    "url": "https://dev.setli.com.au/login",
+    "url": "https://setli.com.au/login",
     "allowNavigation": [
       "*.setli.com.au",
       "dev.setli.com.au",
       "setli.com.au",
+      "*.ngrok-free.dev",
+      "*.ngrok.io",
+      "pants-unshaken-stony.ngrok-free.dev",
       "*.google.com",
       "accounts.google.com",
       "*.accounts.google.com",

@@ -4,7 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "local": "node scripts/set-env.js local --sync",
+    "dev": "node scripts/set-env.js dev --sync",
+    "prod": "node scripts/set-env.js prod --sync",
+    "production": "node scripts/set-env.js prod --sync",
+    "sync": "node scripts/cap-cmd.js sync",
+    "open": "node scripts/cap-cmd.js open",
+    "run": "node scripts/cap-cmd.js run",
+    "android": "npx cap run android",
+    "ios": "npx cap run ios",
+    "sync:ios": "npx cap sync ios",
+    "sync:android": "npx cap sync android",
+    "open:ios": "npx cap open ios",
+    "open:android": "npx cap open android",
+    "run:ios": "npx cap run ios",
+    "run:android": "npx cap run android"
   },
   "repository": {
     "type": "git",
