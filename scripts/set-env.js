@@ -17,7 +17,7 @@ const androidBuildGradlePath = path.join(androidAppDir, 'build.gradle');
 const envConfigs = {
   local: {
     name: 'Local',
-    url: 'https://pants-unshaken-stony.ngrok-free.dev/login',
+    url: 'https://fifty-bikes-battle.loca.lt/login',
     applicationIdSuffix: '.local',
     versionNameSuffix: '-local',
     bundleIdSuffix: '.local',

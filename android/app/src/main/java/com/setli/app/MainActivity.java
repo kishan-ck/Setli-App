@@ -90,6 +90,7 @@ public class MainActivity extends BridgeActivity {
             // ==============================
             // BASE64 IMAGE DOWNLOAD
             // ==============================
+            Log.e("TAG", "onCreate: IMAGE URL " +url);
             if (url != null && url.startsWith("data:image/")) {
                 try {
                     // Example:

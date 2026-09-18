@@ -8,7 +8,7 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.setli.app.local" />
+                  <option name="appId" value="com.setli.app.dev" />
                   <option name="mobileSdkAppId" value="1:71067166728:android:cff41a25ab93c9fa9309bd" />
                   <option name="projectId" value="setli-505108" />
                   <option name="projectNumber" value="71067166728" />

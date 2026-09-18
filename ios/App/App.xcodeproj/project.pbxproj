@@ -78,6 +78,7 @@
 				958DCC722DB07C7200EA8C5F /* debug.xcconfig */,
 				504EC3061FED79650016851F /* App */,
 				504EC3051FED79650016851F /* Products */,
+				FAD68726305BBCC500DAE6C0 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -124,6 +125,14 @@
 				847FF3D430501D4000B7351A /* PlusJakartaSans-ExtraBold.ttf */,
 			);
 			path = fonts;
+			sourceTree = "<group>";
+		};
+		FAD68726305BBCC500DAE6C0 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				958DCC732DB07C7200EA8C5F /* release.xcconfig */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -364,8 +373,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 95L29MZABL;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = T87Z84L364;
 				INFOPLIST_FILE = App/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "$(SETLI_DISPLAY_NAME)";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -392,8 +401,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 95L29MZABL;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = T87Z84L364;
 				INFOPLIST_FILE = App/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "$(SETLI_DISPLAY_NAME)";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
