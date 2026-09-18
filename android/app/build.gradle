@@ -1,10 +1,17 @@
 apply plugin: 'com.android.application'
+apply from: 'environment.gradle'
 
 android {
     namespace = "com.setli.app"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.setli.app"
+        if (project.hasProperty('activeApplicationIdSuffix') && project.activeApplicationIdSuffix) {
+            applicationIdSuffix project.activeApplicationIdSuffix
+        }
+        if (project.hasProperty('activeVersionNameSuffix') && project.activeVersionNameSuffix) {
+            versionNameSuffix project.activeVersionNameSuffix
+        }
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -16,6 +23,7 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -23,6 +31,7 @@ android {
         }
     }
 }
+
 
 repositories {
     flatDir{
