@@ -1,1 +1,5 @@
+// Capacitor debug config — do not edit manually
 CAPACITOR_DEBUG = true
+
+// Active environment overrides
+#include "env-dev.xcconfig"

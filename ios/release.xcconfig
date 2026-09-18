@@ -1,0 +1,4 @@
+// Capacitor release config — do not edit manually
+
+// Active environment overrides
+#include "env-dev.xcconfig"
