@@ -2,4 +2,4 @@
 CAPACITOR_DEBUG = true
 
 // Active environment overrides
-#include "env-dev.xcconfig"
+#include "env-local.xcconfig"

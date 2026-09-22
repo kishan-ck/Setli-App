@@ -6,6 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "local": "node scripts/set-env.js local --sync",
+    "testing": "node scripts/set-env.js testing --sync",
+    "test:env": "node scripts/set-env.js testing --sync",
     "dev": "node scripts/set-env.js dev --sync",
     "prod": "node scripts/set-env.js prod --sync",
     "production": "node scripts/set-env.js prod --sync",
@@ -37,7 +39,9 @@
     "@capacitor/android": "^8.5.1",
     "@capacitor/browser": "^8.0.4",
     "@capacitor/core": "^8.5.1",
+    "@capacitor/filesystem": "^8.1.3",
     "@capacitor/ios": "^8.5.1",
+    "@capacitor/local-notifications": "^8.3.1",
     "@capacitor/push-notifications": "^8.1.2",
     "@capacitor/splash-screen": "^8.0.2"
   },

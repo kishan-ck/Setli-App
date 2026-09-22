@@ -4,11 +4,12 @@
   "webDir": "www",
   "appendUserAgent": "SetliApp-WebView",
   "server": {
-    "url": "https://dev.setli.com.au/login",
+    "url": "https://young-crews-vanish.loca.lt/login",
     "allowNavigation": [
       "*.setli.com.au",
       "dev.setli.com.au",
       "setli.com.au",
+      "cdn.setli.com.au",
       "*.ngrok-free.dev",
       "*.ngrok.io",
       "pants-unshaken-stony.ngrok-free.dev",

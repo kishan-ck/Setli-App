@@ -17,7 +17,25 @@ const androidBuildGradlePath = path.join(androidAppDir, 'build.gradle');
 const envConfigs = {
   local: {
     name: 'Local',
-    url: 'https://fifty-bikes-battle.loca.lt/login',
+    url: 'https://young-crews-vanish.loca.lt/login',
+    applicationIdSuffix: '.local',
+    versionNameSuffix: '-local',
+    bundleIdSuffix: '.local',
+    displayName: 'Setli LOCAL',
+    xconfigFile: 'env-local.xcconfig'
+  },
+  testing: {
+    name: 'Testing',
+    url: 'https://young-crews-vanish.loca.lt/login',
+    applicationIdSuffix: '.local',
+    versionNameSuffix: '-local',
+    bundleIdSuffix: '.local',
+    displayName: 'Setli LOCAL',
+    xconfigFile: 'env-local.xcconfig'
+  },
+  test: {
+    name: 'Testing',
+    url: 'https://young-crews-vanish.loca.lt/login',
     applicationIdSuffix: '.local',
     versionNameSuffix: '-local',
     bundleIdSuffix: '.local',
@@ -60,7 +78,7 @@ const shouldSync = args.includes('--sync') || args.includes('-s');
 const targetEnv = envConfigs[requestedEnv];
 
 if (!targetEnv) {
-  console.error(`❌ Unknown environment "${requestedEnv}". Available: local, dev, prod`);
+  console.error(`❌ Unknown environment "${requestedEnv}". Available: local, testing, dev, prod`);
   process.exit(1);
 }
 
