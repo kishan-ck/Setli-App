@@ -16,6 +16,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
 import android.webkit.URLUtil;
 import android.webkit.WebView;
 import android.widget.TextView;
@@ -77,8 +78,6 @@ public class MainActivity extends BridgeActivity {
                     webView.goBack();
                 } else {
                     showExitConfirmationDialog();
-//                    setEnabled(false);
-//                    getOnBackPressedDispatcher().onBackPressed();
                 }
             }
         });
@@ -88,137 +87,163 @@ public class MainActivity extends BridgeActivity {
         webView.setDownloadListener((url, userAgent, contentDisposition, mimeType, contentLength) -> {
 
             // ==============================
-            // BASE64 IMAGE DOWNLOAD
+            // 1. BASE64 / DATA URI DOWNLOAD (All file types: PDF, ZIP, Images, CSV)
             // ==============================
-            Log.e("TAG", "onCreate: IMAGE URL " +url);
-            if (url != null && url.startsWith("data:image/")) {
+            if (url != null && url.startsWith("data:")) {
                 try {
-                    // Example:
-                    // data:image/png;base64,iVBORw0KGgoAAAANS...
-
                     String[] parts = url.split(",", 2);
-
                     if (parts.length != 2) {
-                        Toast.makeText(this, "Invalid image data", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Invalid download data", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    // Get MIME type
-                    String header = parts[0];
+                    String header = parts[0].toLowerCase();
                     String base64Data = parts[1];
-                    String imageType = "png";
+                    String fileExt = "bin";
+                    String resolvedMime = mimeType != null ? mimeType : "application/octet-stream";
 
-                    if (header.contains("image/jpeg")) {
-                        imageType = "jpg";
-                    } else if (header.contains("image/jpg")) {
-                        imageType = "jpg";
+                    if (header.contains("pdf")) {
+                        fileExt = "pdf";
+                        resolvedMime = "application/pdf";
+                    } else if (header.contains("zip")) {
+                        fileExt = "zip";
+                        resolvedMime = "application/zip";
+                    } else if (header.contains("csv")) {
+                        fileExt = "csv";
+                        resolvedMime = "text/csv";
+                    } else if (header.contains("sheet") || header.contains("excel") || header.contains("xlsx")) {
+                        fileExt = "xlsx";
+                        resolvedMime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    } else if (header.contains("image/png")) {
+                        fileExt = "png";
+                        resolvedMime = "image/png";
+                    } else if (header.contains("image/jpeg") || header.contains("image/jpg")) {
+                        fileExt = "jpg";
+                        resolvedMime = "image/jpeg";
                     } else if (header.contains("image/webp")) {
-                        imageType = "webp";
-                    } else if (header.contains("image/gif")) {
-                        imageType = "gif";
+                        fileExt = "webp";
+                        resolvedMime = "image/webp";
                     }
 
-                    // Decode Base64
-                    byte[] imageBytes = Base64.decode(base64Data, Base64.DEFAULT);
+                    byte[] fileBytes = Base64.decode(base64Data, Base64.DEFAULT);
+                    String fileName = "Setli_" + System.currentTimeMillis() + "." + fileExt;
 
-                    String fileName = "Setli_" + System.currentTimeMillis() + "." + imageType;
-
-                    // ==============================
-                    // ANDROID 10+
-                    // ==============================
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-
                         ContentValues values = new ContentValues();
                         values.put(MediaStore.Downloads.DISPLAY_NAME, fileName);
-                        values.put(MediaStore.Downloads.MIME_TYPE, "image/" + imageType);
-                        values.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/Setli");
+                        values.put(MediaStore.Downloads.MIME_TYPE, resolvedMime);
+                        values.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);
                         values.put(MediaStore.Downloads.IS_PENDING, 1);
 
-                        Uri imageUri = getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
-
-                        if (imageUri != null) {
-                            try (OutputStream outputStream = getContentResolver().openOutputStream(imageUri)) {
+                        Uri fileUri = getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
+                        if (fileUri != null) {
+                            try (OutputStream outputStream = getContentResolver().openOutputStream(fileUri)) {
                                 if (outputStream != null) {
-                                    outputStream.write(imageBytes);
+                                    outputStream.write(fileBytes);
                                     outputStream.flush();
                                 }
                             }
-
                             values.clear();
                             values.put(MediaStore.Downloads.IS_PENDING, 0);
-
-                            getContentResolver().update(imageUri, values, null, null);
-
-                            Toast.makeText(this, "Image downloaded successfully", Toast.LENGTH_SHORT).show();
+                            getContentResolver().update(fileUri, values, null, null);
+                            Toast.makeText(this, "Downloaded " + fileName, Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        // ==============================
-                        // ANDROID 9 AND BELOW
-                        // ==============================
-                        File picturesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                        File setliDir = new File(picturesDir, "Setli");
-
-                        if (!setliDir.exists()) {
-                            setliDir.mkdirs();
-                        }
-
-                        File imageFile = new File(setliDir, fileName);
-
-                        try (FileOutputStream outputStream = new FileOutputStream(imageFile)) {
-                            outputStream.write(imageBytes);
+                        File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                        if (!downloadsDir.exists()) downloadsDir.mkdirs();
+                        File destFile = new File(downloadsDir, fileName);
+                        try (FileOutputStream outputStream = new FileOutputStream(destFile)) {
+                            outputStream.write(fileBytes);
                             outputStream.flush();
                         }
-
-                        // Make image visible in Gallery
-                        MediaScannerConnection.scanFile(this, new String[]{imageFile.getAbsolutePath()}, new String[]{"image/" + imageType}, null);
-                        Toast.makeText(this, "Image downloaded successfully", Toast.LENGTH_SHORT).show();
+                        MediaScannerConnection.scanFile(this, new String[]{destFile.getAbsolutePath()}, new String[]{resolvedMime}, null);
+                        Toast.makeText(this, "Downloaded " + fileName, Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
-                    Log.e("Download", "Base64 image download failed", e);
-                    Toast.makeText(this, "Unable to download image", Toast.LENGTH_SHORT).show();
+                    Log.e("Download", "Base64 download failed", e);
+                    Toast.makeText(this, "Unable to save file", Toast.LENGTH_SHORT).show();
                 }
                 return;
             }
 
-
             // ==============================
-            // NORMAL HTTP / HTTPS DOWNLOAD
+            // 2. REMOTE HTTP / HTTPS DOWNLOAD
             // ==============================
-
             if (url == null || !(url.startsWith("http://") || url.startsWith("https://"))) {
-
                 Log.d("Download", "Unsupported download URL: " + url);
-
                 return;
             }
 
             try {
+                // Extract filename from Content-Disposition if present
+                String fileName = null;
+                if (contentDisposition != null && !contentDisposition.isEmpty()) {
+                    int fnIndex = contentDisposition.indexOf("filename=");
+                    if (fnIndex != -1) {
+                        fileName = contentDisposition.substring(fnIndex + 9).trim();
+                        if (fileName.contains(";")) {
+                            fileName = fileName.substring(0, fileName.indexOf(";")).trim();
+                        }
+                        if (fileName.startsWith("\"") && fileName.endsWith("\"") && fileName.length() > 1) {
+                            fileName = fileName.substring(1, fileName.length() - 1);
+                        }
+                    }
+                }
+                if (fileName == null || fileName.isEmpty()) {
+                    fileName = URLUtil.guessFileName(url, contentDisposition, mimeType);
+                }
+
+                // Detect and fix file extensions and MIME types
+                String urlLower = url.toLowerCase();
+                String dispLower = contentDisposition != null ? contentDisposition.toLowerCase() : "";
+                String resolvedMime = mimeType;
+
+                if (urlLower.contains(".pdf") || dispLower.contains(".pdf") || (fileName != null && fileName.toLowerCase().endsWith(".pdf"))) {
+                    resolvedMime = "application/pdf";
+                    if (fileName != null && !fileName.toLowerCase().endsWith(".pdf")) {
+                        fileName = (fileName.endsWith(".bin") ? fileName.substring(0, fileName.length() - 4) : fileName) + ".pdf";
+                    }
+                } else if (urlLower.contains(".zip") || dispLower.contains(".zip") || (fileName != null && fileName.toLowerCase().endsWith(".zip"))) {
+                    resolvedMime = "application/zip";
+                    if (fileName != null && !fileName.toLowerCase().endsWith(".zip")) {
+                        fileName = (fileName.endsWith(".bin") ? fileName.substring(0, fileName.length() - 4) : fileName) + ".zip";
+                    }
+                } else if (urlLower.contains(".csv") || dispLower.contains(".csv") || (fileName != null && fileName.toLowerCase().endsWith(".csv"))) {
+                    resolvedMime = "text/csv";
+                    if (fileName != null && !fileName.toLowerCase().endsWith(".csv")) {
+                        fileName = (fileName.endsWith(".bin") ? fileName.substring(0, fileName.length() - 4) : fileName) + ".csv";
+                    }
+                }
 
                 DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-
-                request.setMimeType(mimeType);
-
-                String fileName = URLUtil.guessFileName(url, contentDisposition, mimeType);
+                if (resolvedMime != null && !resolvedMime.isEmpty() && !resolvedMime.equals("application/octet-stream")) {
+                    request.setMimeType(resolvedMime);
+                }
 
                 request.addRequestHeader("User-Agent", userAgent);
 
+                // Attach session cookies so authenticated files (invoices, reports, leases) download properly
+                String cookie = CookieManager.getInstance().getCookie(url);
+                if (cookie != null) {
+                    request.addRequestHeader("Cookie", cookie);
+                }
+                // Bypass headers for local development & tunnels
+                request.addRequestHeader("bypass-tunnel-reminder", "true");
+                request.addRequestHeader("ngrok-skip-browser-warning", "true");
+                request.addRequestHeader("Accept", "application/pdf, application/zip, text/csv, */*");
+
                 request.setTitle(fileName);
-                request.setDescription("Downloading file...");
-
+                request.setDescription("Downloading " + fileName);
                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-
                 request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
 
                 DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-
                 downloadManager.enqueue(request);
 
-                Toast.makeText(this, "Download started", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Downloading " + fileName, Toast.LENGTH_SHORT).show();
 
             } catch (Exception e) {
-
                 Log.e("Download", "Download failed", e);
-
                 Toast.makeText(this, "Unable to download file", Toast.LENGTH_SHORT).show();
             }
         });
@@ -360,16 +385,10 @@ public class MainActivity extends BridgeActivity {
             View dot3,
             View dot4
     ) {
-        // Update Primary Action button text: "Next  ›" or "Get Started  ›"
         btnPrimaryAction.setText(index == 4 ? "Get Started  ›" : "Next  ›");
-
-        // Update Skip button: hidden on the final slide
         tvSkip.setVisibility(index == 4 ? View.GONE : View.VISIBLE);
-
-        // Update Back button: hidden on the first slide
         btnBack.setVisibility(index > 0 ? View.VISIBLE : View.INVISIBLE);
 
-        // Update Indicator Dots (Pill expands to 22dp, circles are 6dp)
         updateDot(dot0, index == 0);
         updateDot(dot1, index == 1);
         updateDot(dot2, index == 2);
